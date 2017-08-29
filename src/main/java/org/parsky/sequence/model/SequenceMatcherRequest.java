@@ -1,6 +1,7 @@
 package org.parsky.sequence.model;
 
 
+import com.google.common.base.Optional;
 import org.parsky.character.EndOfInputCharacterMatcher;
 import org.parsky.sequence.model.tree.TextNode;
 
@@ -37,8 +38,8 @@ public class SequenceMatcherRequest {
     public MatchResult text(int jump) {
         return new MatchResult(range(jump), new TextNode(content, offset, offset + jump));
     }
-    public MatchResult empty () {
-        return text(0);
+    public SequenceMatcherResult empty () {
+        return new SequenceMatcherResult(SequenceMatcherResultType.MATCHED, 0, Optional.of(text(0)));
     }
 
     public Range range (int jump) {

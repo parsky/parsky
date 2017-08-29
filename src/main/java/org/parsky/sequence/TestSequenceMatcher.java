@@ -3,10 +3,10 @@ package org.parsky.sequence;
 import org.parsky.sequence.model.SequenceMatcherRequest;
 import org.parsky.sequence.model.SequenceMatcherResult;
 
-public class OptionalSequenceMatcher implements SequenceMatcher {
+public class TestSequenceMatcher implements SequenceMatcher {
     private final SequenceMatcher sequenceMatcher;
 
-    public OptionalSequenceMatcher(SequenceMatcher sequenceMatcher) {
+    public TestSequenceMatcher(SequenceMatcher sequenceMatcher) {
         this.sequenceMatcher = sequenceMatcher;
     }
 
@@ -14,7 +14,9 @@ public class OptionalSequenceMatcher implements SequenceMatcher {
     public SequenceMatcherResult matches(SequenceMatcherRequest sequenceMatcherRequest) {
         SequenceMatcherResult result = sequenceMatcher.matches(sequenceMatcherRequest);
 
-        if (result.isMismatch()) return sequenceMatcherRequest.empty();
+        if (result.matched()) {
+            return sequenceMatcherRequest.empty();
+        }
 
         return result;
     }
