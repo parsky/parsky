@@ -9,7 +9,7 @@ Parsing made easy for Java
 
 # Status
 
-[![Build Status](https://travis-ci.org/parsky/parsky.svg?branch=master)](https://travis-ci.org/parsky/parsky)
+[ ![Codeship Status for parsky/parsky](https://app.codeship.com/projects/4c7e4cc0-6f37-0135-60e6-4ae74039163a/status?branch=master)](https://app.codeship.com/projects/242826)
 [![codecov](https://codecov.io/gh/parsky/parsky/branch/master/graph/badge.svg)](https://codecov.io/gh/parsky/parsky)
 
 
