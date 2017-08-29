@@ -1,8 +1,16 @@
-apply plugin: 'java'
-apply plugin: 'jacoco'
+plugins {
+    id "java"
+    id "jacoco"
+    id "maven"
+    id "maven-publish"
+    id "com.jfrog.bintray" version "1.7.3"
+}
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
+
+group = "org.parsky"
+version = System.getenv("TRAVIS_TAG")
 
 repositories {
     mavenLocal()
@@ -24,5 +32,89 @@ jacocoTestReport {
         xml.destination "${buildDir}/reports/jacoco/report.xml"
         html.enabled false
         csv.enabled false
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    publications = ['MavenCentral']
+
+    publish = true
+
+    pkg {
+        repo = 'maven'
+        name = project.name
+        userOrg = 'parsky'
+
+        version {
+            gpg {
+                sign = true
+            }
+            mavenCentralSync {
+                sync = true
+                user = System.getenv('MAVEN_CENTRAL_USER')
+                password = System.getenv('MAVEN_CENTRAL_PASSWORD')
+                close = '1'
+            }
+        }
+    }
+}
+
+def pomConfig = {
+    licenses {
+        license {
+            name "The Apache Software License, Version 2.0"
+            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id "joaomelo"
+            name 'Joao Melo'
+            email "joao.silva.de.melo@gmail.com"
+        }
+    }
+
+    scm {
+        url "https://github.com/parsky/parsky"
+    }
+}
+
+// Create the publication with the pom configuration:
+publishing {
+    publications {
+        MavenCentral(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            groupId project.group
+            artifactId project.name
+            version project.version
+
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'Simple Java Parser')
+                root.appendNode('name', 'Parsky')
+                root.appendNode('url', 'http://parsky.org')
+                root.children().last() + pomConfig
+            }
+        }
     }
 }
