@@ -37,6 +37,9 @@ public class SequenceMatcherRequest {
     public MatchResult text(int jump) {
         return new MatchResult(range(jump), new TextNode(content, offset, offset + jump));
     }
+    public MatchResult empty () {
+        return text(0);
+    }
 
     public Range range (int jump) {
         return Range.range(offset, jump);
