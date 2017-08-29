@@ -5,7 +5,7 @@ import org.parsky.sequence.model.SequenceMatcherRequest;
 import org.parsky.sequence.model.SequenceMatcherResult;
 import org.parsky.sequence.model.tree.ContentNode;
 
-public class Parsky<T> {
+public class Parsky<T> {A
     private final Class<T> type;
     private final TransformSequenceMatcher<T> matcher;
 
