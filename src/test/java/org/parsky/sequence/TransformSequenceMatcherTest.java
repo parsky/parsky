@@ -8,6 +8,7 @@ import org.parsky.sequence.model.tree.ContentNode;
 import org.parsky.sequence.transform.Transformation;
 
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -31,7 +32,7 @@ public class TransformSequenceMatcherTest {
         SequenceMatcherResult result = underTest.matches(request);
 
         assertThat(result.matched(), is(true));
-        assertThat(result.getMatchResult().getNode(), is(contentNode));
+        assertEquals(result.getMatchResult().getNode(), contentNode);
     }
 
     @Test

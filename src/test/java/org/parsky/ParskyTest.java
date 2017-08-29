@@ -19,7 +19,7 @@ public class ParskyTest {
         TransformSequenceMatcher<String> matcher = mock(TransformSequenceMatcher.class);
         Parsky<String> underTest = new Parsky<>(String.class, matcher);
 
-        given(matcher.matches(any())).willReturn(SequenceMatcherResult.mismatch());
+        given(matcher.matches(any(SequenceMatcherRequest.class))).willReturn(SequenceMatcherResult.mismatch());
 
         Parsky.Result<String> result = underTest.parse("content");
 
@@ -36,7 +36,7 @@ public class ParskyTest {
         TransformSequenceMatcher<String> matcher = mock(TransformSequenceMatcher.class);
         Parsky<String> underTest = new Parsky<>(String.class, matcher);
 
-        given(matcher.matches(any())).willReturn(SequenceMatcherResult.match(offset, matchResult));
+        given(matcher.matches(any(SequenceMatcherRequest.class))).willReturn(SequenceMatcherResult.match(offset, matchResult));
         given(matchResult.getNode()).willReturn(new ContentNode<>(output));
 
         Parsky.Result<String> result = underTest.parse("content");
@@ -54,7 +54,7 @@ public class ParskyTest {
         Parsky<String> underTest = new Parsky<>(String.class, matcher);
 
         SequenceMatcherResult sequenceMatcherResult = SequenceMatcherResult.error(sequenceMatcherRequest);
-        given(matcher.matches(any())).willReturn(sequenceMatcherResult);
+        given(matcher.matches(any(SequenceMatcherRequest.class))).willReturn(sequenceMatcherResult);
 
         Parsky.Result<String> result = underTest.parse("content");
 

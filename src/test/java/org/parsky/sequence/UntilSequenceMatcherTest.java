@@ -1,11 +1,12 @@
 package org.parsky.sequence;
 
 import org.junit.Test;
-import org.parsky.character.CharacterMatcher;
+import org.parsky.character.CharacterMatchers;
 import org.parsky.sequence.model.SequenceMatcherResult;
 import org.parsky.sequence.model.tree.TextNode;
 
-import static java.util.Arrays.asList;
+import java.util.Arrays;
+
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThat;
@@ -13,7 +14,7 @@ import static org.parsky.sequence.SequentTestUtils.request;
 
 public class UntilSequenceMatcherTest {
     private UntilSequenceMatcher underTest = new UntilSequenceMatcher(new FirstOfSequenceMatcher(
-            asList(new StringSequenceMatcher("test"))
+            Arrays.<SequenceMatcher>asList(new StringSequenceMatcher("test"))
     ));
 
     @Test
@@ -28,7 +29,7 @@ public class UntilSequenceMatcherTest {
     @Test
     public void matchWhenEndOfInput() throws Exception {
         SequenceMatcherResult result = new UntilSequenceMatcher(new FirstOfSequenceMatcher(
-                asList(new CharacterSequenceMatcher(CharacterMatcher.endOfInput()))
+                Arrays.<SequenceMatcher>asList(new CharacterSequenceMatcher(CharacterMatchers.endOfInput()))
         )).matches(request("hello test"));
 
         assertThat(result.matched(), is(true));
