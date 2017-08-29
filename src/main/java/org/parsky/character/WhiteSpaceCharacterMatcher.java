@@ -4,7 +4,7 @@ public class WhiteSpaceCharacterMatcher implements CharacterMatcher {
     private static WhiteSpaceCharacterMatcher SINGLETON = new WhiteSpaceCharacterMatcher();
 
     public static WhiteSpaceCharacterMatcher whitespace () {
-        return new WhiteSpaceCharacterMatcher();
+        return SINGLETON;
     }
 
     private WhiteSpaceCharacterMatcher() {}
