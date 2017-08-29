@@ -1,0 +1,11 @@
+language: java
+
+jdk:
+  - openjdk7
+
+script:
+  - gradle check
+  - gradle test jacoco
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
