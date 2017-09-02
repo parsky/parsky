@@ -11,7 +11,7 @@ Parsing made easy for Java
 
 [![Build Status](https://travis-ci.org/parsky/parsky.svg?branch=master)](https://travis-ci.org/parsky/parsky)
 [![codecov](https://codecov.io/gh/parsky/parsky/branch/master/graph/badge.svg)](https://codecov.io/gh/parsky/parsky)
-
+[![Download](https://api.bintray.com/packages/parsky/maven/parsky/images/download.svg) ](https://bintray.com/parsky/maven/parsky/_latestVersion)
 
 # License
 
