@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.parsky.character.CharacterMatcher;
 import org.parsky.sequence.model.SequenceMatcherRequest;
 import org.parsky.sequence.model.SequenceMatcherResult;
-import org.parsky.sequence.model.tree.TextNode;
+import org.parsky.sequence.model.tree.ContentNode;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
@@ -26,7 +26,7 @@ public class CharacterSequenceMatcherTest {
 
         assertThat(result.matched(), is(true));
         assertThat(result.getJump(), is(1));
-        assertThat(result.getMatchResult().getNode(), is(instanceOf(TextNode.class)));
+        assertThat(result.getMatchResult().getNode(), is(instanceOf(ContentNode.class)));
     }
 
     @Test

@@ -26,12 +26,11 @@ public class SequenceMatchersTest {
         assertThat(SequenceMatchers.sequence(mock(SequenceMatcher.class)), instanceOf(ConsecutiveSequenceMatcher.class));
         assertThat(SequenceMatchers.not(mock(SequenceMatcher.class)), instanceOf(NotSequenceMatcher.class));
         assertThat(SequenceMatchers.transform(mock(SequenceMatcher.class), mock(Transformation.class)), instanceOf(TransformSequenceMatcher.class));
-        assertThat(SequenceMatchers.flatten(mock(SequenceMatcher.class)), instanceOf(FlattenSequenceMatcher.class));
+        assertThat(SequenceMatchers.matchedText(mock(SequenceMatcher.class)), instanceOf(MatchedTextSequenceMatcher.class));
         assertThat(SequenceMatchers.whitespaces(), instanceOf(ZeroOrMoreSequenceMatcher.class));
         assertThat(SequenceMatchers.skipWhitespaces(mock(SequenceMatcher.class)), instanceOf(SkipWhiteSpacesSequenceMatcher.class));
         assertThat(SequenceMatchers.optional(mock(SequenceMatcher.class)), instanceOf(OptionalSequenceMatcher.class));
         assertThat(SequenceMatchers.oneOrMore(mock(SequenceMatcher.class)), instanceOf(OneOrMoreSequenceMatcher.class));
-        assertThat(SequenceMatchers.merge(mock(SequenceMatcher.class)), instanceOf(MergeSequenceMatcher.class));
-        assertThat(SequenceMatchers.merge(Collections.singletonList(mock(SequenceMatcher.class))), instanceOf(MergeSequenceMatcher.class));
+        assertThat(SequenceMatchers.flatten(mock(SequenceMatcher.class)), instanceOf(FlattenSequenceMatcher.class));
     }
 }

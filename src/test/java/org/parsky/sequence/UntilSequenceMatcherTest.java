@@ -3,7 +3,7 @@ package org.parsky.sequence;
 import org.junit.Test;
 import org.parsky.character.CharacterMatchers;
 import org.parsky.sequence.model.SequenceMatcherResult;
-import org.parsky.sequence.model.tree.TextNode;
+import org.parsky.sequence.model.tree.ContentNode;
 
 import java.util.Arrays;
 
@@ -22,8 +22,8 @@ public class UntilSequenceMatcherTest {
         SequenceMatcherResult result = underTest.matches(request("hello test"));
 
         assertThat(result.matched(), is(true));
-        assertThat(result.getMatchResult().getNode(), instanceOf(TextNode.class));
-        assertThat(((TextNode) result.getMatchResult().getNode()).getText(), is("hello "));
+        assertThat(result.getMatchResult().getNode(), instanceOf(ContentNode.class));
+        assertThat(((ContentNode<String>) result.getMatchResult().getNode()).getContent(), is("hello "));
     }
 
     @Test
@@ -33,8 +33,8 @@ public class UntilSequenceMatcherTest {
         )).matches(request("hello test"));
 
         assertThat(result.matched(), is(true));
-        assertThat(result.getMatchResult().getNode(), instanceOf(TextNode.class));
-        assertThat(((TextNode) result.getMatchResult().getNode()).getText(), is("hello test"));
+        assertThat(result.getMatchResult().getNode(), instanceOf(ContentNode.class));
+        assertThat(((ContentNode<String>) result.getMatchResult().getNode()).getContent(), is("hello test"));
     }
 
     @Test

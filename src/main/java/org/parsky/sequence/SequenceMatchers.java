@@ -8,83 +8,134 @@ import org.parsky.sequence.transform.Transformation;
 
 import java.util.List;
 
-import static java.util.Arrays.asList;
 import static org.parsky.character.CharacterMatchers.whiteSpace;
 
 public class SequenceMatchers {
-    public static CharacterSequenceMatcher match (CharacterMatcher characterMatcher) {
+    public static SequenceMatcher match (CharacterMatcher characterMatcher) {
         return new CharacterSequenceMatcher(characterMatcher);
     }
 
-    public static StringSequenceMatcher string (String text) {
+    public static SequenceMatcher match (String label, CharacterMatcher characterMatcher) {
+        return new LabelledSequenceMatcher(label, match(characterMatcher));
+    }
+
+    public static SequenceMatcher string (String text) {
         return new StringSequenceMatcher(text);
     }
 
-    public static ConsecutiveSequenceMatcher sequence (SequenceMatcher first, SequenceMatcher... others) {
+    public static SequenceMatcher string (String label, String text) {
+        return new LabelledSequenceMatcher(label, string(text));
+    }
+
+    public static SequenceMatcher sequence (SequenceMatcher first, SequenceMatcher... others) {
         return new ConsecutiveSequenceMatcher(ImmutableList.<SequenceMatcher>builder().add(first).add(others).build());
     }
 
-    public static ConsecutiveSequenceMatcher sequence (List<SequenceMatcher> list) {
+    public static SequenceMatcher sequence (String label, SequenceMatcher first, SequenceMatcher... others) {
+        return new LabelledSequenceMatcher(label, sequence(first, others));
+    }
+
+    public static SequenceMatcher sequence (List<SequenceMatcher> list) {
         return new ConsecutiveSequenceMatcher(list);
     }
 
-    public static MandatorySequenceMatcher mandatory(SequenceMatcher sequenceMatcher) {
+    public static SequenceMatcher sequence (String label, List<SequenceMatcher> list) {
+        return new LabelledSequenceMatcher(label, sequence(list));
+    }
+
+    public static SequenceMatcher mandatory(SequenceMatcher sequenceMatcher) {
         return new MandatorySequenceMatcher(sequenceMatcher);
     }
 
-    public static ZeroOrMoreSequenceMatcher zeroOrMore(SequenceMatcher sequenceMatcher) {
+    public static SequenceMatcher mandatory(String label, SequenceMatcher sequenceMatcher) {
+        return new LabelledSequenceMatcher(label, mandatory(sequenceMatcher));
+    }
+
+    public static SequenceMatcher zeroOrMore(SequenceMatcher sequenceMatcher) {
         return new ZeroOrMoreSequenceMatcher(sequenceMatcher);
     }
 
-    public static TestSequenceMatcher test (SequenceMatcher sequenceMatcher) {
+    public static SequenceMatcher zeroOrMore(String label, SequenceMatcher sequenceMatcher) {
+        return new LabelledSequenceMatcher(label, zeroOrMore(sequenceMatcher));
+    }
+
+    public static SequenceMatcher test (SequenceMatcher sequenceMatcher) {
         return new TestSequenceMatcher(sequenceMatcher);
     }
 
-    public static UntilSequenceMatcher until (SequenceMatcher sequenceMatcher) {
+    public static SequenceMatcher test (String label, SequenceMatcher sequenceMatcher) {
+        return new LabelledSequenceMatcher(label, new TestSequenceMatcher(sequenceMatcher));
+    }
+
+    public static SequenceMatcher until (SequenceMatcher sequenceMatcher) {
         return new UntilSequenceMatcher(sequenceMatcher);
     }
 
-    public static FirstOfSequenceMatcher firstOf (SequenceMatcher first, SequenceMatcher... sequenceMatchers) {
+    public static SequenceMatcher until (String label, SequenceMatcher sequenceMatcher) {
+        return new LabelledSequenceMatcher(label, until(sequenceMatcher));
+    }
+
+    public static SequenceMatcher firstOf (SequenceMatcher first, SequenceMatcher... sequenceMatchers) {
         return new FirstOfSequenceMatcher(ImmutableList.<SequenceMatcher>builder().add(first).add(sequenceMatchers).build());
     }
 
-    public static FirstOfSequenceMatcher firstOf (List<SequenceMatcher> sequenceMatchers) {
+    public static SequenceMatcher firstOf (String label, SequenceMatcher first, SequenceMatcher... sequenceMatchers) {
+        return new LabelledSequenceMatcher(label, firstOf(first, sequenceMatchers));
+    }
+
+    public static SequenceMatcher firstOf (List<SequenceMatcher> sequenceMatchers) {
         return new FirstOfSequenceMatcher(sequenceMatchers);
     }
 
-    public static NotSequenceMatcher not (SequenceMatcher sequenceMatcher) {
+    public static SequenceMatcher firstOf (String label, List<SequenceMatcher> sequenceMatchers) {
+        return new LabelledSequenceMatcher(label, firstOf(sequenceMatchers));
+    }
+
+    public static SequenceMatcher not (SequenceMatcher sequenceMatcher) {
         return new NotSequenceMatcher(sequenceMatcher);
     }
 
-    public static <T> TransformSequenceMatcher<T> transform (SequenceMatcher sequenceMatcher, Transformation<T> transform) {
+    public static SequenceMatcher not (String label, SequenceMatcher sequenceMatcher) {
+        return new LabelledSequenceMatcher(label, not(sequenceMatcher));
+    }
+
+    public static <T> TypedSequenceMatcher<T> transform (SequenceMatcher sequenceMatcher, Transformation<T> transform) {
         return new TransformSequenceMatcher<>(sequenceMatcher, transform);
     }
 
-    public static FlattenSequenceMatcher flatten (SequenceMatcher sequenceMatcher) {
-        return new FlattenSequenceMatcher(sequenceMatcher);
+    public static <T> TypedSequenceMatcher<T> transform (String label, SequenceMatcher sequenceMatcher, Transformation<T> transform) {
+        return new LabelledSequenceMatcher<>(label, transform(sequenceMatcher, transform));
+    }
+
+    public static MatchedTextSequenceMatcher matchedText(SequenceMatcher sequenceMatcher) {
+        return new MatchedTextSequenceMatcher(sequenceMatcher);
     }
 
     public static SequenceMatcher whitespaces () {
         return zeroOrMore(match(whiteSpace()));
     }
 
-    public static SkipWhiteSpacesSequenceMatcher skipWhitespaces (SequenceMatcher sequenceMatcher) {
-        return new SkipWhiteSpacesSequenceMatcher(WhiteSpaceCharacterMatcher.whitespace(), sequenceMatcher);
+    public static <T> SkipWhiteSpacesSequenceMatcher<T> skipWhitespaces (SequenceMatcher sequenceMatcher) {
+        return new SkipWhiteSpacesSequenceMatcher<>(WhiteSpaceCharacterMatcher.whitespace(), sequenceMatcher);
     }
 
-    public static OptionalSequenceMatcher optional (SequenceMatcher matcher) {
+    public static SequenceMatcher optional (SequenceMatcher matcher) {
         return new OptionalSequenceMatcher(matcher);
     }
 
-    public static OneOrMoreSequenceMatcher oneOrMore(SequenceMatcher delegate) {
+    public static SequenceMatcher optional (String label, SequenceMatcher matcher) {
+        return new LabelledSequenceMatcher<>(label, new OptionalSequenceMatcher(matcher));
+    }
+
+    public static SequenceMatcher oneOrMore(SequenceMatcher delegate) {
         return new OneOrMoreSequenceMatcher(delegate);
     }
 
-    public static MergeSequenceMatcher merge (SequenceMatcher... list) {
-        return new MergeSequenceMatcher(asList(list));
+    public static SequenceMatcher oneOrMore(String label, SequenceMatcher delegate) {
+        return new LabelledSequenceMatcher<>(label, oneOrMore(delegate));
     }
 
-    public static MergeSequenceMatcher merge (List<SequenceMatcher> list) {
-        return new MergeSequenceMatcher(list);
+    public static SequenceMatcher flatten(SequenceMatcher sequenceMatcher) {
+        return new FlattenSequenceMatcher(sequenceMatcher);
     }
 }

@@ -2,7 +2,8 @@ package org.parsky.sequence;
 
 import org.junit.Test;
 import org.parsky.sequence.model.SequenceMatcherResult;
-import org.parsky.sequence.model.tree.TextNode;
+import org.parsky.sequence.model.tree.ContentNode;
+import org.parsky.sequence.model.tree.ListNode;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
@@ -10,21 +11,17 @@ import static org.junit.Assert.assertThat;
 import static org.parsky.sequence.SequentTestUtils.request;
 
 public class FlattenSequenceMatcherTest {
-    private FlattenSequenceMatcher underTest = new FlattenSequenceMatcher(new OneOrMoreSequenceMatcher(new StringSequenceMatcher("test")));
-
     @Test
-    public void match() throws Exception {
-        SequenceMatcherResult result = underTest.matches(request("testtest"));
+    public void mergeLists() throws Exception {
+        SequenceMatcherResult result = new FlattenSequenceMatcher(SequenceMatchers.sequence(
+                new ZeroOrMoreSequenceMatcher(new StringSequenceMatcher("test")),
+                new StringSequenceMatcher("a")
+        )).matches(request("testtestaa"));
 
         assertThat(result.matched(), is(true));
-        assertThat(result.getMatchResult().getNode(), instanceOf(TextNode.class));
-        assertThat(((TextNode) result.getMatchResult().getNode()).getText(), is("testtest"));
-    }
-
-    @Test
-    public void mismatch() throws Exception {
-        SequenceMatcherResult result = underTest.matches(request("te"));
-
-        assertThat(result.matched(), is(false));
+        assertThat(result.getMatchResult().getNode(), instanceOf(ListNode.class));
+        assertThat(((ContentNode<String>) ((ListNode) result.getMatchResult().getNode()).getNodes().get(0)).getContent(), is("test"));
+        assertThat(((ContentNode<String>) ((ListNode) result.getMatchResult().getNode()).getNodes().get(1)).getContent(), is("test"));
+        assertThat(((ContentNode<String>) ((ListNode) result.getMatchResult().getNode()).getNodes().get(2)).getContent(), is("a"));
     }
 }

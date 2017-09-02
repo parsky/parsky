@@ -7,7 +7,6 @@ import org.parsky.sequence.model.MatchResult;
 import org.parsky.sequence.model.tree.ContentNode;
 import org.parsky.sequence.model.tree.ListNode;
 import org.parsky.sequence.model.tree.Node;
-import org.parsky.sequence.model.tree.TextNode;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -67,7 +66,7 @@ public class ListContentTransformationTest {
         MatchResult matchResult = mock(MatchResult.class);
 
 
-        given(matchResult.getNode()).willReturn(new TextNode("test".toCharArray(), 0, 4));
+        given(matchResult.getNode()).willReturn(new ContentNode<>("test"));
         given(function.apply((ListContentTransformation.Request) argThat(new ReflectionEquals(new ListContentTransformation.Request(matchResult, Collections.singletonList((Object) "test"))))))
                 .willReturn("result");
 

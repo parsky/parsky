@@ -1,7 +1,7 @@
 package org.parsky.sequence.model;
 
 import org.junit.Test;
-import org.parsky.sequence.model.tree.TextNode;
+import org.parsky.sequence.model.tree.ContentNode;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
@@ -35,7 +35,7 @@ public class SequenceMatcherRequestTest {
 
         MatchResult result = request.text(3);
 
-        assertThat(result.getNode(), is(instanceOf(TextNode.class)));
-        assertThat(((TextNode) result.getNode()).getText(), is("est"));
+        assertThat(result.getNode(), is(instanceOf(ContentNode.class)));
+        assertThat(((ContentNode<String>) result.getNode()).getContent(), is("est"));
     }
 }

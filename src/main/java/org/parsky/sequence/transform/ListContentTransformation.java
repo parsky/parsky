@@ -5,7 +5,6 @@ import org.parsky.sequence.model.MatchResult;
 import org.parsky.sequence.model.tree.ContentNode;
 import org.parsky.sequence.model.tree.ListNode;
 import org.parsky.sequence.model.tree.Node;
-import org.parsky.sequence.model.tree.TextNode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,10 +21,6 @@ public class ListContentTransformation<T> implements Transformation<T> {
     public ContentNode<T> transform(MatchResult request) {
         if (request.getNode() instanceof ContentNode) {
             return new ContentNode<>(function.apply(new Request(request, Collections.singletonList(((ContentNode) request.getNode()).getContent()))));
-        }
-
-        if (request.getNode() instanceof TextNode) {
-            return new ContentNode<>(function.apply(new Request(request, Collections.singletonList((Object) ((TextNode) request.getNode()).getText()))));
         }
 
         if (request.getNode() instanceof ListNode) {
