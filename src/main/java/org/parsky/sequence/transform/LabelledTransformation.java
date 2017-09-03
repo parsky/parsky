@@ -17,7 +17,7 @@ public class LabelledTransformation<T> implements Transformation<T> {
         try {
             return transformation.transform(matchResult);
         } catch (RuntimeException e) {
-            throw new LabelRuntimeException(String.format("Exception captured on sequence matcher %s", label), e);
+            throw new LabelRuntimeException(String.format("Exception captured on sequence matcher labelled '%s'", label), e);
         }
     }
 

@@ -24,5 +24,6 @@ public class CharacterRangeMatcherTest {
         assertFalse(underTest.matches(' '));
         assertFalse(underTest.matches('A'));
         assertFalse(underTest.matches('2'));
+        assertFalse(underTest.matches('ç'));
     }
 }

@@ -8,7 +8,6 @@ import org.parsky.sequence.model.tree.ListNode;
 import org.parsky.sequence.model.tree.Node;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class OneOrMoreSequenceMatcher implements SequenceMatcher {
@@ -24,7 +23,7 @@ public class OneOrMoreSequenceMatcher implements SequenceMatcher {
         if (!result.matched()) return result;
 
         int jump = 0;
-        List<Node> nodes = new ArrayList<>(Collections.singleton(result.getMatchResult().getNode()));
+        List<Node> nodes = new ArrayList<>();
 
         while (result.matched()) {
             nodes.add(result.getMatchResult().getNode());

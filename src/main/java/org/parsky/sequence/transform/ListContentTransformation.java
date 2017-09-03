@@ -52,6 +52,10 @@ public class ListContentTransformation<T> implements Transformation<T> {
             return type.cast(values.get(index));
         }
 
+        public <T> T get (int index) {
+            return (T) values.get(index);
+        }
+
         public int size () {
             return values.size();
         }

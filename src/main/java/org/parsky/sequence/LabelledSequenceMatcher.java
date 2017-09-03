@@ -17,7 +17,7 @@ public class LabelledSequenceMatcher<T> implements TypedSequenceMatcher<T> {
         try {
             return sequenceMatcher.matches(sequenceMatcherRequest);
         } catch (RuntimeException e) {
-            throw new LabelRuntimeException(String.format("Exception captured on sequence matcher %s", label), e);
+            throw new LabelRuntimeException(String.format("Exception captured on sequence matcher labelled  '%s'", label), e);
         }
     }
 
