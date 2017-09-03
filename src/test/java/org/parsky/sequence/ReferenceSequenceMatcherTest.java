@@ -11,7 +11,7 @@ import static org.parsky.sequence.SequentTestUtils.request;
 
 public class ReferenceSequenceMatcherTest {
     private final AtomicReference<StringSequenceMatcher> reference = new AtomicReference<>();
-    private ReferenceSequenceMatcher<StringSequenceMatcher> referenceSequenceMatcher = new ReferenceSequenceMatcher<StringSequenceMatcher>(reference);
+    private ReferenceSequenceMatcher<StringSequenceMatcher> referenceSequenceMatcher = new ReferenceSequenceMatcher<StringSequenceMatcher>();
 
     @Test
     public void match() throws Exception {

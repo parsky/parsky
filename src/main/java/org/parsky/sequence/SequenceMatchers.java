@@ -138,4 +138,8 @@ public class SequenceMatchers {
     public static SequenceMatcher flatten(SequenceMatcher sequenceMatcher) {
         return new FlattenSequenceMatcher(sequenceMatcher);
     }
+
+    public static <T> ReferenceSequenceMatcher reference () {
+        return new ReferenceSequenceMatcher();
+    }
 }

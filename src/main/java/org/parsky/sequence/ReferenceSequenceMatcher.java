@@ -5,15 +5,20 @@ import org.parsky.sequence.model.SequenceMatcherResult;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-public class ReferenceSequenceMatcher<T extends SequenceMatcher> implements SequenceMatcher {
-    private final AtomicReference<T> reference;
+public class ReferenceSequenceMatcher<T> implements TypedSequenceMatcher<T> {
+    private final AtomicReference<SequenceMatcher> reference;
 
-    public ReferenceSequenceMatcher(AtomicReference<T> reference) {
-        this.reference = reference;
+    public ReferenceSequenceMatcher() {
+        this.reference = new AtomicReference<>();
     }
 
     @Override
     public SequenceMatcherResult matches(SequenceMatcherRequest sequenceMatcherRequest) {
         return reference.get().matches(sequenceMatcherRequest);
+    }
+
+    public <T extends SequenceMatcher> T assign(T sequenceMatcher) {
+        reference.set(sequenceMatcher);
+        return sequenceMatcher;
     }
 }
