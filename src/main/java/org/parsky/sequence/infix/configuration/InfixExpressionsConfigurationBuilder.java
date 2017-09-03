@@ -35,6 +35,16 @@ public class InfixExpressionsConfigurationBuilder<Expression, InfixExpression> {
         return this;
     }
 
+    public InfixExpressionsConfigurationBuilder<Expression, InfixExpression> withInfix (InfixExpressionConfiguration<InfixExpression> infix) {
+        this.infixExpressionConfigurations.add(infix);
+        return this;
+    }
+
+    public InfixExpressionsConfigurationBuilder<Expression, InfixExpression> withInfixExpressions (Collection<InfixExpressionConfiguration<InfixExpression>> infixes) {
+        this.infixExpressionConfigurations.addAll(infixes);
+        return this;
+    }
+
     public InfixExpressionsConfigurationBuilder<Expression, InfixExpression> withInfix (String symbol, InfixExpression expression, int precedence) {
         this.infixExpressionConfigurations.add(new InfixExpressionConfiguration<>(
                 SequenceMatchers.transform("infix " + symbol, SequenceMatchers.string(symbol), Transformations.constant(expression)),
