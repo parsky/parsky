@@ -1,15 +1,15 @@
 package org.parsky;
 
-import org.parsky.sequence.TransformSequenceMatcher;
+import org.parsky.sequence.TypedSequenceMatcher;
 import org.parsky.sequence.model.SequenceMatcherRequest;
 import org.parsky.sequence.model.SequenceMatcherResult;
 import org.parsky.sequence.model.tree.ContentNode;
 
 public class Parsky<T> {
     private final Class<T> type;
-    private final TransformSequenceMatcher<T> matcher;
+    private final TypedSequenceMatcher<T> matcher;
 
-    public Parsky(Class<T> type, TransformSequenceMatcher<T> matcher) {
+    public Parsky(Class<T> type, TypedSequenceMatcher<T> matcher) {
         this.type = type;
         this.matcher = matcher;
     }
