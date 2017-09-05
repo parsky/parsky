@@ -142,4 +142,8 @@ public class SequenceMatchers {
     public static <T> ReferenceSequenceMatcher<T> reference () {
         return new ReferenceSequenceMatcher<>();
     }
+
+    public static <T> TypedSequenceMatcher<T> typed (SequenceMatcher sequenceMatcher) {
+        return new CastTypedSequenceMatcher<>(sequenceMatcher);
+    }
 }
