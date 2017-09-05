@@ -139,7 +139,7 @@ public class SequenceMatchers {
         return new FlattenSequenceMatcher(sequenceMatcher);
     }
 
-    public static <T> ReferenceSequenceMatcher reference () {
-        return new ReferenceSequenceMatcher();
+    public static <T> ReferenceSequenceMatcher<T> reference () {
+        return new ReferenceSequenceMatcher<>();
     }
 }
