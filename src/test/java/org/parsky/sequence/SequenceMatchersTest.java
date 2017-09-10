@@ -45,5 +45,6 @@ public class SequenceMatchersTest {
         assertThat(SequenceMatchers.oneOrMore(mock(SequenceMatcher.class)), instanceOf(OneOrMoreSequenceMatcher.class));
         assertThat(SequenceMatchers.oneOrMore("label", mock(SequenceMatcher.class)), instanceOf(LabelledSequenceMatcher.class));
         assertThat(SequenceMatchers.flatten(mock(SequenceMatcher.class)), instanceOf(FlattenSequenceMatcher.class));
+        assertThat(SequenceMatchers.constant(2), instanceOf(ConstantSequenceMatcher.class));
     }
 }

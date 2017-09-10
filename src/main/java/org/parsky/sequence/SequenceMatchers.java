@@ -146,4 +146,8 @@ public class SequenceMatchers {
     public static <T> TypedSequenceMatcher<T> typed (SequenceMatcher sequenceMatcher) {
         return new CastTypedSequenceMatcher<>(sequenceMatcher);
     }
+
+    public static <T> ConstantSequenceMatcher<T> constant (T value) {
+        return new ConstantSequenceMatcher<>(value);
+    }
 }
