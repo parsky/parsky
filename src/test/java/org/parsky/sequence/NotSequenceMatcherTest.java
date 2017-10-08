@@ -5,7 +5,6 @@ import org.parsky.sequence.model.SequenceMatcherRequest;
 import org.parsky.sequence.model.SequenceMatcherResult;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -42,6 +41,6 @@ public class NotSequenceMatcherTest {
         SequenceMatcherResult result = new NotSequenceMatcher(sequenceMatcher)
                 .matches(request);
 
-        assertSame(sequenceMatcherResult, result);
+        assertThat(result.isError(), is(true));
     }
 }

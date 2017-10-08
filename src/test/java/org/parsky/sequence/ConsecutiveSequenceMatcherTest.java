@@ -1,12 +1,9 @@
 package org.parsky.sequence;
 
-import org.hamcrest.collection.IsIterableContainingInOrder;
 import org.junit.Test;
 import org.parsky.sequence.model.MatchResult;
 import org.parsky.sequence.model.SequenceMatcherRequest;
 import org.parsky.sequence.model.SequenceMatcherResult;
-import org.parsky.sequence.model.tree.ListNode;
-import org.parsky.sequence.model.tree.Node;
 
 import java.util.List;
 
@@ -33,8 +30,6 @@ public class ConsecutiveSequenceMatcherTest {
         SequenceMatcherResult result2 = mock(SequenceMatcherResult.class);
         MatchResult matchResult1 = mock(MatchResult.class);
         MatchResult matchResult2 = mock(MatchResult.class);
-        Node node1 = mock(Node.class);
-        Node node2 = mock(Node.class);
 
         given(sequenceMatcher1.matches(request1)).willReturn(result1);
         given(request.incrementOffset(0)).willReturn(request1);
@@ -44,18 +39,15 @@ public class ConsecutiveSequenceMatcherTest {
         given(result1.isError()).willReturn(false);
         given(result1.matched()).willReturn(true);
         given(result1.getMatchResult()).willReturn(matchResult1);
-        given(matchResult1.getNode()).willReturn(node1);
         given(result2.getJump()).willReturn(1);
         given(result2.isError()).willReturn(false);
         given(result2.matched()).willReturn(true);
         given(result2.getMatchResult()).willReturn(matchResult2);
-        given(matchResult2.getNode()).willReturn(node2);
 
         SequenceMatcherResult result = underTest.matches(request);
 
         assertThat(result.matched(), is(true));
-        assertThat(result.getMatchResult().getNode(), is(instanceOf(ListNode.class)));
-        assertThat(((ListNode) result.getMatchResult().getNode()).getNodes(), IsIterableContainingInOrder.contains(node1, node2));
+        assertThat(result.getMatchResult().getValue(), is(instanceOf(List.class)));
     }
 
     @Test
@@ -67,8 +59,6 @@ public class ConsecutiveSequenceMatcherTest {
         SequenceMatcherResult result2 = mock(SequenceMatcherResult.class);
         MatchResult matchResult1 = mock(MatchResult.class);
         MatchResult matchResult2 = mock(MatchResult.class);
-        Node node1 = mock(Node.class);
-        Node node2 = mock(Node.class);
 
         given(sequenceMatcher1.matches(request1)).willReturn(result1);
         given(request.incrementOffset(0)).willReturn(request1);
@@ -78,12 +68,10 @@ public class ConsecutiveSequenceMatcherTest {
         given(result1.isError()).willReturn(false);
         given(result1.matched()).willReturn(true);
         given(result1.getMatchResult()).willReturn(matchResult1);
-        given(matchResult1.getNode()).willReturn(node1);
         given(result2.getJump()).willReturn(1);
         given(result2.isError()).willReturn(false);
         given(result2.matched()).willReturn(false);
         given(result2.getMatchResult()).willReturn(matchResult2);
-        given(matchResult2.getNode()).willReturn(node2);
 
         SequenceMatcherResult result = underTest.matches(request);
 
@@ -99,7 +87,6 @@ public class ConsecutiveSequenceMatcherTest {
         SequenceMatcherResult result1 = mock(SequenceMatcherResult.class);
         SequenceMatcherResult result2 = mock(SequenceMatcherResult.class);
         MatchResult matchResult1 = mock(MatchResult.class);
-        Node node1 = mock(Node.class);
 
         given(sequenceMatcher1.matches(request1)).willReturn(result1);
         given(request.incrementOffset(0)).willReturn(request1);
@@ -109,10 +96,9 @@ public class ConsecutiveSequenceMatcherTest {
         given(result1.isError()).willReturn(true);
         given(result1.matched()).willReturn(false);
         given(result1.getMatchResult()).willReturn(matchResult1);
-        given(matchResult1.getNode()).willReturn(node1);
 
         SequenceMatcherResult result = underTest.matches(request);
 
-        assertThat(result, is(result1));
+        assertThat(result.isError(), is(true));
     }
 }

@@ -1,26 +1,29 @@
 package org.parsky.sequence.infix;
 
+import org.parsky.sequence.SequenceMatcher;
 import org.parsky.sequence.SequenceMatchers;
 import org.parsky.sequence.TransformSequenceMatcher;
-import org.parsky.sequence.TypedSequenceMatcher;
 import org.parsky.sequence.infix.configuration.CombinedExpressionFactory;
 import org.parsky.sequence.infix.transform.CombinedExpressionTransformation;
+import org.parsky.sequence.transform.Transformation;
 import org.parsky.sequence.transform.Transformations;
 
-public class InfixExpressionSequenceMatcher<Expression, InfixExpression> extends TransformSequenceMatcher<Expression> {
-    public InfixExpressionSequenceMatcher(CombinedExpressionFactory<Expression, InfixExpression> combinedExpressionFactory, TypedSequenceMatcher<Expression> expressionSequenceMatcher, TypedSequenceMatcher<InfixExpression> infixExpressionSequenceMatcher) {
+import java.util.List;
+
+public class InfixExpressionSequenceMatcher<Context, Expression, InfixExpression> extends TransformSequenceMatcher<Context, List<Expression>, Expression> {
+    public InfixExpressionSequenceMatcher(CombinedExpressionFactory<Expression, InfixExpression> combinedExpressionFactory, SequenceMatcher<Context, Expression> expressionSequenceMatcher, SequenceMatcher<Context, InfixExpression> infixExpressionSequenceMatcher) {
         super(SequenceMatchers.flatten(
                 SequenceMatchers.sequence(
-                        expressionSequenceMatcher,
-                        SequenceMatchers.flatten(
+                        (SequenceMatcher) expressionSequenceMatcher,
+                        (SequenceMatcher) SequenceMatchers.flatten(
                                 SequenceMatchers.zeroOrMore(
                                         SequenceMatchers.sequence(
-                                                infixExpressionSequenceMatcher,
-                                                expressionSequenceMatcher
+                                                (SequenceMatcher<Context, Object>) infixExpressionSequenceMatcher,
+                                                (SequenceMatcher<Context, Object>) expressionSequenceMatcher
                                         )
                                 )
                         )
                 )
-        ), Transformations.fromContentList(new CombinedExpressionTransformation<>(combinedExpressionFactory)));
+        ), (Transformation) Transformations.fromContentList(new CombinedExpressionTransformation<>(combinedExpressionFactory)));
     }
 }

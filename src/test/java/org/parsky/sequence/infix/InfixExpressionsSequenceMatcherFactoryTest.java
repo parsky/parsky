@@ -3,13 +3,12 @@ package org.parsky.sequence.infix;
 import com.google.common.base.Function;
 import org.junit.Test;
 import org.parsky.character.CharacterMatchers;
+import org.parsky.sequence.SequenceMatcher;
 import org.parsky.sequence.SequenceMatchers;
 import org.parsky.sequence.SequentTestUtils;
-import org.parsky.sequence.TypedSequenceMatcher;
 import org.parsky.sequence.infix.configuration.CombinedExpressionFactory;
 import org.parsky.sequence.infix.configuration.InfixExpressionsConfigurationBuilder;
 import org.parsky.sequence.model.SequenceMatcherResult;
-import org.parsky.sequence.model.tree.ContentNode;
 import org.parsky.sequence.transform.ContentTransformation;
 import org.parsky.sequence.transform.Transformations;
 
@@ -21,8 +20,8 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 public class InfixExpressionsSequenceMatcherFactoryTest {
     @Test
     public void integrationTest() throws Exception {
-        TypedSequenceMatcher<Expression> binaryOperation = new InfixExpressionsSequenceMatcher<>(
-                InfixExpressionsConfigurationBuilder.<Expression, Operator>infixExpressionsConfiguration()
+        SequenceMatcher<Object, Expression> binaryOperation = new InfixExpressionsSequenceMatcher<>(
+                InfixExpressionsConfigurationBuilder.<Object, Expression, Operator>infixExpressionsConfiguration()
                         .withCombinedExpressionFactory(
                                 new CombinedExpressionFactory<Expression, Operator>() {
                                     @Override
@@ -48,9 +47,9 @@ public class InfixExpressionsSequenceMatcherFactoryTest {
 
         SequenceMatcherResult result = binaryOperation.matches(SequentTestUtils.request("3 : 4 - 3 + 91 * 12"));
 
-        assertThat(((ContentNode<BinaryOperation>) result.getMatchResult().getNode()).getContent().left, instanceOf(BinaryOperation.class));
-        assertThat(((ContentNode<BinaryOperation>) result.getMatchResult().getNode()).getContent().operator, is(Operator.SUB));
-        assertThat(((ContentNode<BinaryOperation>) result.getMatchResult().getNode()).getContent().right, instanceOf(BinaryOperation.class));
+        assertThat(((BinaryOperation) result.getMatchResult().getValue()).left, instanceOf(BinaryOperation.class));
+        assertThat(((BinaryOperation) result.getMatchResult().getValue()).operator, is(Operator.SUB));
+        assertThat(((BinaryOperation) result.getMatchResult().getValue()).right, instanceOf(BinaryOperation.class));
     }
 
     public enum Operator {

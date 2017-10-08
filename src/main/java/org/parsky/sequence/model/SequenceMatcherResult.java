@@ -1,26 +1,25 @@
 package org.parsky.sequence.model;
 
 import com.google.common.base.Optional;
-import org.parsky.sequence.model.tree.Node;
 
-public class SequenceMatcherResult {
-    public static SequenceMatcherResult mismatch () {
-        return new SequenceMatcherResult(SequenceMatcherResultType.MISMATCH, 0, Optional.<MatchResult>absent());
+public class SequenceMatcherResult<T> {
+    public static <T> SequenceMatcherResult<T> mismatch () {
+        return new SequenceMatcherResult<T>(SequenceMatcherResultType.MISMATCH, 0, Optional.<MatchResult<T>>absent());
     }
 
-    public static SequenceMatcherResult match (int jump, MatchResult result) {
-        return new SequenceMatcherResult(SequenceMatcherResultType.MATCHED, jump, Optional.of(result));
+    public static <T> SequenceMatcherResult<T> match (int jump, MatchResult<T> result) {
+        return new SequenceMatcherResult<>(SequenceMatcherResultType.MATCHED, jump, Optional.of(result));
     }
 
-    public static SequenceMatcherResult error(SequenceMatcherRequest sequenceMatcherRequest) {
-        return new SequenceMatcherResult(SequenceMatcherResultType.ERROR, sequenceMatcherRequest.getOffset(), Optional.<MatchResult>absent());
+    public static <T> SequenceMatcherResult<T> error(SequenceMatcherRequest sequenceMatcherRequest) {
+        return new SequenceMatcherResult<>(SequenceMatcherResultType.ERROR, sequenceMatcherRequest.getOffset(), Optional.<MatchResult<T>>absent());
     }
 
     private final SequenceMatcherResultType type;
     private final int jump;
-    private final Optional<MatchResult> match;
+    private final Optional<MatchResult<T>> match;
 
-    public SequenceMatcherResult(SequenceMatcherResultType type, int jump, Optional<MatchResult> match) {
+    public SequenceMatcherResult(SequenceMatcherResultType type, int jump, Optional<MatchResult<T>> match) {
         this.type = type;
         this.jump = jump;
         this.match = match;
@@ -45,15 +44,19 @@ public class SequenceMatcherResult {
         return type == SequenceMatcherResultType.ERROR;
     }
 
-    public MatchResult getMatchResult() {
+    public MatchResult<T> getMatchResult() {
         return match.get();
     }
 
-    public SequenceMatcherResult withJump(int jump) {
-        return new SequenceMatcherResult(type, jump, match);
+    public SequenceMatcherResult<T> withJump(int jump) {
+        return new SequenceMatcherResult<>(type, jump, match);
     }
 
-    public SequenceMatcherResult withNode(Node node) {
-        return new SequenceMatcherResult(type, jump, Optional.of(match.get().with(node)));
+    public <R> SequenceMatcherResult<R> withValue(R value) {
+        return new SequenceMatcherResult<>(type, jump, Optional.of(match.get().with(value)));
+    }
+
+    public <T> SequenceMatcherResult<T> cast() {
+        return (SequenceMatcherResult<T>) this;
     }
 }

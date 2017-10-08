@@ -4,20 +4,20 @@ import org.parsky.character.WhiteSpaceCharacterMatcher;
 import org.parsky.sequence.model.SequenceMatcherRequest;
 import org.parsky.sequence.model.SequenceMatcherResult;
 
-public class SkipWhiteSpacesSequenceMatcher<T> implements TypedSequenceMatcher<T> {
+public class SkipWhiteSpacesSequenceMatcher<C, T> implements SequenceMatcher<C, T> {
     private final WhiteSpaceCharacterMatcher whiteSpaceCharacterMatcher;
-    private final SequenceMatcher sequenceMatcher;
+    private final SequenceMatcher<C, T> sequenceMatcher;
 
-    public SkipWhiteSpacesSequenceMatcher(WhiteSpaceCharacterMatcher whiteSpaceCharacterMatcher, SequenceMatcher sequenceMatcher) {
+    public SkipWhiteSpacesSequenceMatcher(WhiteSpaceCharacterMatcher whiteSpaceCharacterMatcher, SequenceMatcher<C, T> sequenceMatcher) {
         this.whiteSpaceCharacterMatcher = whiteSpaceCharacterMatcher;
         this.sequenceMatcher = sequenceMatcher;
     }
 
     @Override
-    public SequenceMatcherResult matches(SequenceMatcherRequest sequenceMatcherRequest) {
+    public SequenceMatcherResult<T> matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
         int beforeJump = skipWhiteSpaces(sequenceMatcherRequest);
-        SequenceMatcherRequest request = sequenceMatcherRequest.incrementOffset(beforeJump);
-        SequenceMatcherResult result = sequenceMatcher.matches(request);
+        SequenceMatcherRequest<C> request = sequenceMatcherRequest.incrementOffset(beforeJump);
+        SequenceMatcherResult<T> result = sequenceMatcher.matches(request);
 
         if (result.matched()) {
             int afterJump = skipWhiteSpaces(request.incrementOffset(result.getJump()));

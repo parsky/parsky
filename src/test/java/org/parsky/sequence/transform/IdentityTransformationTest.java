@@ -1,24 +1,18 @@
 package org.parsky.sequence.transform;
 
 import org.junit.Test;
-import org.parsky.sequence.model.MatchResult;
-import org.parsky.sequence.model.tree.ContentNode;
+import org.parsky.sequence.model.Range;
 
 import static org.junit.Assert.assertSame;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 public class IdentityTransformationTest {
     @Test
     public void transform() throws Exception {
-        MatchResult matchResult = mock(MatchResult.class);
-        ContentNode contentNode = mock(ContentNode.class);
+        Object input = new Object();
+        Object result = new IdentityTransformation<>()
+                .transform(mock(Range.class), input);
 
-        given(matchResult.getNode()).willReturn(contentNode);
-
-        ContentNode<Object> result = new IdentityTransformation<>()
-                .transform(matchResult);
-
-        assertSame(result, contentNode);
+        assertSame(input, result);
     }
 }

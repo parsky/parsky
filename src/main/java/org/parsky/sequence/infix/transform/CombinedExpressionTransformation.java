@@ -4,7 +4,7 @@ import com.google.common.base.Function;
 import org.parsky.sequence.infix.configuration.CombinedExpressionFactory;
 import org.parsky.sequence.transform.ListContentTransformation;
 
-public class CombinedExpressionTransformation<Expression, InfixExpression> implements Function<ListContentTransformation.Request, Expression> {
+public class CombinedExpressionTransformation<Expression, InfixExpression> implements Function<ListContentTransformation.Request<Object>, Expression> {
     private final CombinedExpressionFactory<Expression, InfixExpression> factory;
 
     public CombinedExpressionTransformation(CombinedExpressionFactory<Expression, InfixExpression> factory) {
@@ -12,11 +12,11 @@ public class CombinedExpressionTransformation<Expression, InfixExpression> imple
     }
 
     @Override
-    public Expression apply(ListContentTransformation.Request input) {
+    public Expression apply(ListContentTransformation.Request<Object> input) {
         return getRest(0, input);
     }
 
-    private Expression getRest(int offset, ListContentTransformation.Request input) {
+    private Expression getRest(int offset, ListContentTransformation.Request<Object> input) {
         if (offset + 1 >= input.size()) return input.get(input.size() - 1);
 
         Expression expression = input.get(offset);

@@ -2,10 +2,8 @@ package org.parsky.sequence;
 
 import org.junit.Test;
 import org.parsky.sequence.model.SequenceMatcherResult;
-import org.parsky.sequence.model.tree.ContentNode;
 
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThat;
 import static org.parsky.sequence.SequentTestUtils.request;
 
@@ -19,7 +17,6 @@ public class StringSequenceMatcherTest {
 
         assertThat(result.matched(), is(true));
         assertThat(result.getJump(), is(4));
-        assertThat(result.getMatchResult().getNode(), is(instanceOf(ContentNode.class)));
     }
 
     @Test

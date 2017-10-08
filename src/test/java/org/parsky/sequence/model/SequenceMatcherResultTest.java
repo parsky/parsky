@@ -2,12 +2,10 @@ package org.parsky.sequence.model;
 
 import com.google.common.base.Optional;
 import org.junit.Test;
-import org.parsky.sequence.model.tree.Node;
+import org.mockito.ArgumentMatchers;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -30,18 +28,17 @@ public class SequenceMatcherResultTest {
 
     @Test
     public void withNode() throws Exception {
-        Node node = mock(Node.class);
         MatchResult matchResult = mock(MatchResult.class);
         MatchResult anotherMatchResult = mock(MatchResult.class);
 
         SequenceMatcherResultType type = SequenceMatcherResultType.ERROR;
         Optional<MatchResult> matchResultOptional = Optional.of(matchResult);
 
+        given(matchResult.with(ArgumentMatchers.any())).willReturn(anotherMatchResult);
+
         SequenceMatcherResult underTest = new SequenceMatcherResult(type, 0, matchResultOptional);
 
-        given(matchResult.with(node)).willReturn(anotherMatchResult);
-
-        SequenceMatcherResult result = underTest.withNode(node);
+        SequenceMatcherResult result = underTest.withValue(new Object());
 
         assertThat(result.getType(), is(type));
         assertThat(result.getJump(), is(0));

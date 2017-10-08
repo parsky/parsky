@@ -2,7 +2,6 @@ package org.parsky.sequence;
 
 import org.junit.Test;
 import org.parsky.sequence.model.SequenceMatcherResult;
-import org.parsky.sequence.model.tree.ContentNode;
 
 import static org.junit.Assert.assertEquals;
 
@@ -13,6 +12,6 @@ public class ConstantSequenceMatcherTest {
                 .matches(SequentTestUtils.request("asd"));
 
 
-        assertEquals(3, ((ContentNode) result.getMatchResult().getNode()).getContent());
+        assertEquals(3, result.getMatchResult().getValue());
     }
 }

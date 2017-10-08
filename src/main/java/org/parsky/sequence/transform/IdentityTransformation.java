@@ -1,11 +1,10 @@
 package org.parsky.sequence.transform;
 
-import org.parsky.sequence.model.MatchResult;
-import org.parsky.sequence.model.tree.ContentNode;
+import org.parsky.sequence.model.Range;
 
-public class IdentityTransformation<T> implements Transformation<T> {
+public class IdentityTransformation<T> implements Transformation<T, T> {
     @Override
-    public ContentNode<T> transform(MatchResult matchResult) {
-        return (ContentNode<T>) matchResult.getNode();
+    public T transform(Range range, T input) {
+        return input;
     }
 }

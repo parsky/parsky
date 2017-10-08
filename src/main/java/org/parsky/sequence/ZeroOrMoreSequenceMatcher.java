@@ -1,47 +1,41 @@
 package org.parsky.sequence;
 
 
-import org.parsky.sequence.model.MatchResult;
 import org.parsky.sequence.model.SequenceMatcherRequest;
 import org.parsky.sequence.model.SequenceMatcherResult;
-import org.parsky.sequence.model.tree.ListNode;
-import org.parsky.sequence.model.tree.Node;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ZeroOrMoreSequenceMatcher implements SequenceMatcher {
-    private final SequenceMatcher sequenceMatcher;
+public class ZeroOrMoreSequenceMatcher<C, R> implements SequenceMatcher<C, List<R>> {
+    private final SequenceMatcher<C, R> sequenceMatcher;
 
-    public ZeroOrMoreSequenceMatcher(SequenceMatcher sequenceMatcher) {
+    public ZeroOrMoreSequenceMatcher(SequenceMatcher<C, R> sequenceMatcher) {
         this.sequenceMatcher = sequenceMatcher;
     }
 
     @Override
-    public SequenceMatcherResult matches(SequenceMatcherRequest sequenceMatcherRequest) {
+    public SequenceMatcherResult<List<R>> matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
         int jump = 0;
-        SequenceMatcherResult result = sequenceMatcher.matches(sequenceMatcherRequest);
-        List<Node> nodes = new ArrayList<>();
+        SequenceMatcherResult<R> result = sequenceMatcher.matches(sequenceMatcherRequest);
+        List<R> nodes = new ArrayList<>();
 
         while (result.matched()) {
-            nodes.add(result.getMatchResult().getNode());
+            nodes.add(result.getMatchResult().getValue());
             if (result.getJump() == 0)
-                return SequenceMatcherResult.match(jump, result(sequenceMatcherRequest, jump, nodes));
+                return sequenceMatcherRequest.match(jump, nodes);
 
             jump += result.getJump();
-            SequenceMatcherRequest newRequest = sequenceMatcherRequest.incrementOffset(jump);
+            SequenceMatcherRequest<C> newRequest = sequenceMatcherRequest.incrementOffset(jump);
 
             if (newRequest.isEndOfInput())
-                return SequenceMatcherResult.match(jump, result(sequenceMatcherRequest, jump, nodes));
+                return sequenceMatcherRequest.match(jump, nodes);
+
             result = sequenceMatcher.matches(newRequest);
         }
 
-        if (result.isError()) return result;
+        if (result.isError()) return result.cast();
 
-        return SequenceMatcherResult.match(jump, result(sequenceMatcherRequest, jump, nodes));
-    }
-
-    private MatchResult result(SequenceMatcherRequest sequenceMatcherRequest, int jump, List<Node> nodes) {
-        return new MatchResult(sequenceMatcherRequest.range(jump), new ListNode(nodes));
+        return sequenceMatcherRequest.match(jump, nodes);
     }
 }

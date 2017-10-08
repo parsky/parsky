@@ -3,8 +3,7 @@ package org.parsky.sequence.transform;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.parsky.sequence.model.MatchResult;
-import org.parsky.sequence.model.tree.ContentNode;
+import org.parsky.sequence.model.Range;
 
 import static org.junit.Assert.assertSame;
 import static org.mockito.BDDMockito.given;
@@ -20,23 +19,25 @@ public class LabelledTransformationTest {
 
     @Test
     public void transform() throws Exception {
-        MatchResult matchResult = mock(MatchResult.class);
-        ContentNode contentNode = mock(ContentNode.class);
+        Object input = new Object();
+        Object transformationResult = new Object();
+        Range range = mock(Range.class);
 
-        given(transformation.transform(matchResult)).willReturn(contentNode);
+        given(transformation.transform(range, input)).willReturn(transformationResult);
 
-        ContentNode result = underTest.transform(matchResult);
+        Object result = underTest.transform(range, input);
 
-        assertSame(result, contentNode);
+        assertSame(result, transformationResult);
     }
     @Test
     public void transformException() throws Exception {
-        MatchResult matchResult = mock(MatchResult.class);
+        Object input = new Object();
+        Range range = mock(Range.class);
 
-        given(transformation.transform(matchResult)).willThrow(new RuntimeException("exception"));
+        given(transformation.transform(range, input)).willThrow(new RuntimeException());
 
         expectedException.expectMessage(label);
 
-        underTest.transform(matchResult);
+        underTest.transform(range, input);
     }
 }

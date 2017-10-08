@@ -1,15 +1,15 @@
 package org.parsky.sequence.infix.configuration;
 
-import org.parsky.sequence.TypedSequenceMatcher;
+import org.parsky.sequence.SequenceMatcher;
 
 import java.util.Collection;
 
-public class InfixExpressionsConfiguration<Expression, InfixExpression> {
+public class InfixExpressionsConfiguration<Context, Expression, InfixExpression> {
     private final CombinedExpressionFactory<Expression, InfixExpression> combinedExpressionFactory;
-    private final TypedSequenceMatcher<Expression> expressionParser;
-    private final Collection<InfixExpressionConfiguration<InfixExpression>> infixExpressionConfigurations;
+    private final SequenceMatcher<Context, Expression> expressionParser;
+    private final Collection<InfixExpressionConfiguration<Context, InfixExpression>> infixExpressionConfigurations;
 
-    public InfixExpressionsConfiguration(CombinedExpressionFactory<Expression, InfixExpression> combinedExpressionFactory, TypedSequenceMatcher<Expression> expressionParser, Collection<InfixExpressionConfiguration<InfixExpression>> infixExpressionConfigurations) {
+    public InfixExpressionsConfiguration(CombinedExpressionFactory<Expression, InfixExpression> combinedExpressionFactory, SequenceMatcher<Context, Expression> expressionParser, Collection<InfixExpressionConfiguration<Context, InfixExpression>> infixExpressionConfigurations) {
         this.combinedExpressionFactory = combinedExpressionFactory;
         this.expressionParser = expressionParser;
         this.infixExpressionConfigurations = infixExpressionConfigurations;
@@ -19,11 +19,11 @@ public class InfixExpressionsConfiguration<Expression, InfixExpression> {
         return combinedExpressionFactory;
     }
 
-    public TypedSequenceMatcher<Expression> getExpressionParser() {
+    public SequenceMatcher<Context, Expression> getExpressionParser() {
         return expressionParser;
     }
 
-    public Collection<InfixExpressionConfiguration<InfixExpression>> getInfixExpressionConfigurations() {
+    public Collection<InfixExpressionConfiguration<Context, InfixExpression>> getInfixExpressionConfigurations() {
         return infixExpressionConfigurations;
     }
 }

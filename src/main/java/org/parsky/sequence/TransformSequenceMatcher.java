@@ -4,23 +4,26 @@ import org.parsky.sequence.model.SequenceMatcherRequest;
 import org.parsky.sequence.model.SequenceMatcherResult;
 import org.parsky.sequence.transform.Transformation;
 
-public class TransformSequenceMatcher<T> implements TypedSequenceMatcher<T> {
-    private final SequenceMatcher sequenceMatcher;
-    private final Transformation<T> transformation;
+public class TransformSequenceMatcher<C, I, O> implements SequenceMatcher<C, O> {
+    private final SequenceMatcher<C, I> sequenceMatcher;
+    private final Transformation<I, O> transformation;
 
-    public TransformSequenceMatcher(SequenceMatcher sequenceMatcher, Transformation<T> transformation) {
+    public TransformSequenceMatcher(SequenceMatcher<C, I> sequenceMatcher, Transformation<I, O> transformation) {
         this.sequenceMatcher = sequenceMatcher;
         this.transformation = transformation;
     }
 
     @Override
-    public SequenceMatcherResult matches(SequenceMatcherRequest sequenceMatcherRequest) {
-        SequenceMatcherResult result = sequenceMatcher.matches(sequenceMatcherRequest);
+    public SequenceMatcherResult<O> matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
+        SequenceMatcherResult<I> result = sequenceMatcher.matches(sequenceMatcherRequest);
 
         if (result.matched()) {
-            return result.withNode(transformation.transform(result.getMatchResult()));
+            return result.withValue(transformation.transform(
+                    result.getMatchResult().getRange(),
+                    result.getMatchResult().getValue()
+            ));
         }
 
-        return result;
+        return result.cast();
     }
 }

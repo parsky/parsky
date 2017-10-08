@@ -1,9 +1,8 @@
 package org.parsky.sequence.transform;
 
-import org.parsky.sequence.model.MatchResult;
-import org.parsky.sequence.model.tree.ContentNode;
+import org.parsky.sequence.model.Range;
 
-public class ConstantTransformation<T> implements Transformation<T> {
+public class ConstantTransformation<V, T> implements Transformation<V, T> {
     private final T value;
 
     public ConstantTransformation(T value) {
@@ -11,7 +10,7 @@ public class ConstantTransformation<T> implements Transformation<T> {
     }
 
     @Override
-    public ContentNode<T> transform(MatchResult matchResult) {
-        return new ContentNode<>(value);
+    public T transform(Range range, Object input) {
+        return value;
     }
 }

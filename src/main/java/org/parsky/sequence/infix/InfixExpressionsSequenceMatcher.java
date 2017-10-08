@@ -2,47 +2,42 @@ package org.parsky.sequence.infix;
 
 import org.parsky.sequence.SequenceMatcher;
 import org.parsky.sequence.SequenceMatchers;
-import org.parsky.sequence.TypedSequenceMatcher;
 import org.parsky.sequence.infix.configuration.InfixExpressionConfiguration;
 import org.parsky.sequence.infix.configuration.InfixExpressionsConfiguration;
 import org.parsky.sequence.model.SequenceMatcherRequest;
 import org.parsky.sequence.model.SequenceMatcherResult;
-import org.parsky.sequence.transform.Transformations;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
-public class InfixExpressionsSequenceMatcher<Expression, InfixExpression> implements TypedSequenceMatcher<Expression> {
-    private final TypedSequenceMatcher<Expression> matcher;
+public class InfixExpressionsSequenceMatcher<C, Expression, InfixExpression> implements SequenceMatcher<C, Expression> {
+    private final SequenceMatcher<C, Expression> matcher;
 
-    public InfixExpressionsSequenceMatcher (InfixExpressionsConfiguration<Expression, InfixExpression> configuration) {
+    public InfixExpressionsSequenceMatcher (InfixExpressionsConfiguration<C, Expression, InfixExpression> configuration) {
         this.matcher = create(configuration);
     }
 
-    private TypedSequenceMatcher<Expression> create(InfixExpressionsConfiguration<Expression, InfixExpression> configuration) {
-        TreeMap<Integer, List<SequenceMatcher>> precedenceMap = getPrecedenceMap(configuration);
+    private SequenceMatcher<C, Expression> create(InfixExpressionsConfiguration<C, Expression, InfixExpression> configuration) {
+        TreeMap<Integer, List<SequenceMatcher<C, InfixExpression>>> precedenceMap = getPrecedenceMap(configuration);
 
-        TypedSequenceMatcher expressionParser = configuration.getExpressionParser();
+        SequenceMatcher<C, Expression> expressionParser = configuration.getExpressionParser();
         for (Integer precedence : precedenceMap.keySet()) {
             expressionParser = new InfixExpressionSequenceMatcher<>(
                     configuration.getCombinedExpressionFactory(),
                     expressionParser,
-                    SequenceMatchers.transform(
-                            SequenceMatchers.firstOf(precedenceMap.get(precedence)),
-                            Transformations.<InfixExpression>identity()
-                    )
+                    SequenceMatchers.firstOf(precedenceMap.get(precedence))
             );
         }
 
         return expressionParser;
     }
 
-    private TreeMap<Integer, List<SequenceMatcher>> getPrecedenceMap(InfixExpressionsConfiguration<Expression, InfixExpression> configuration) {
-        TreeMap<Integer, List<SequenceMatcher>> precedenceMap = new TreeMap<>();
-        for (InfixExpressionConfiguration<InfixExpression> infixExpressionConfiguration : configuration.getInfixExpressionConfigurations()) {
+    private TreeMap<Integer, List<SequenceMatcher<C, InfixExpression>>> getPrecedenceMap(InfixExpressionsConfiguration<C, Expression, InfixExpression> configuration) {
+        TreeMap<Integer, List<SequenceMatcher<C, InfixExpression>>> precedenceMap = new TreeMap<>();
+        for (InfixExpressionConfiguration<C, InfixExpression> infixExpressionConfiguration : configuration.getInfixExpressionConfigurations()) {
             if (!precedenceMap.containsKey(infixExpressionConfiguration.getPrecedence()))
-                precedenceMap.put(infixExpressionConfiguration.getPrecedence(), new ArrayList<SequenceMatcher>());
+                precedenceMap.put(infixExpressionConfiguration.getPrecedence(), new ArrayList<SequenceMatcher<C, InfixExpression>>());
 
             precedenceMap.get(infixExpressionConfiguration.getPrecedence())
                     .add(infixExpressionConfiguration.getSequenceMatcher());
@@ -51,7 +46,7 @@ public class InfixExpressionsSequenceMatcher<Expression, InfixExpression> implem
     }
 
     @Override
-    public SequenceMatcherResult matches(SequenceMatcherRequest sequenceMatcherRequest) {
+    public SequenceMatcherResult<Expression> matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
         return matcher.matches(sequenceMatcherRequest);
     }
 }

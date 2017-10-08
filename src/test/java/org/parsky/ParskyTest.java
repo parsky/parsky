@@ -5,7 +5,6 @@ import org.parsky.sequence.TransformSequenceMatcher;
 import org.parsky.sequence.model.MatchResult;
 import org.parsky.sequence.model.SequenceMatcherRequest;
 import org.parsky.sequence.model.SequenceMatcherResult;
-import org.parsky.sequence.model.tree.ContentNode;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -16,12 +15,12 @@ import static org.mockito.Mockito.mock;
 public class ParskyTest {
     @Test
     public void parseMismatch() throws Exception {
-        TransformSequenceMatcher<String> matcher = mock(TransformSequenceMatcher.class);
-        Parsky<String> underTest = new Parsky<>(String.class, matcher);
+        TransformSequenceMatcher<Object, String, String> matcher = mock(TransformSequenceMatcher.class);
+        Parsky<Object, String> underTest = new Parsky<>(matcher);
 
         given(matcher.matches(any(SequenceMatcherRequest.class))).willReturn(SequenceMatcherResult.mismatch());
 
-        Parsky.Result<String> result = underTest.parse("content");
+        Parsky.Result<String> result = underTest.parse(new Object(),"content");
 
         assertThat(result.isSuccess(), is(false));
         assertThat(result.isError(), is(false));
@@ -33,13 +32,13 @@ public class ParskyTest {
         String output = "output";
 
         MatchResult matchResult = mock(MatchResult.class);
-        TransformSequenceMatcher<String> matcher = mock(TransformSequenceMatcher.class);
-        Parsky<String> underTest = new Parsky<>(String.class, matcher);
+        TransformSequenceMatcher<Object, String, String> matcher = mock(TransformSequenceMatcher.class);
+        Parsky<Object, String> underTest = new Parsky<>(matcher);
 
         given(matcher.matches(any(SequenceMatcherRequest.class))).willReturn(SequenceMatcherResult.match(offset, matchResult));
-        given(matchResult.getNode()).willReturn(new ContentNode<>(output));
+        given(matchResult.getValue()).willReturn(output);
 
-        Parsky.Result<String> result = underTest.parse("content");
+        Parsky.Result<String> result = underTest.parse(new Object(),"content");
 
         assertThat(result.isSuccess(), is(true));
         assertThat(result.isError(), is(false));
@@ -50,13 +49,13 @@ public class ParskyTest {
     @Test
     public void parseError() throws Exception {
         SequenceMatcherRequest sequenceMatcherRequest = mock(SequenceMatcherRequest.class);
-        TransformSequenceMatcher<String> matcher = mock(TransformSequenceMatcher.class);
-        Parsky<String> underTest = new Parsky<>(String.class, matcher);
+        TransformSequenceMatcher<Object, String, String> matcher = mock(TransformSequenceMatcher.class);
+        Parsky<Object, String> underTest = new Parsky<>(matcher);
 
         SequenceMatcherResult sequenceMatcherResult = SequenceMatcherResult.error(sequenceMatcherRequest);
         given(matcher.matches(any(SequenceMatcherRequest.class))).willReturn(sequenceMatcherResult);
 
-        Parsky.Result<String> result = underTest.parse("content");
+        Parsky.Result<String> result = underTest.parse(new Object(),"content");
 
         assertThat(result.isSuccess(), is(false));
         assertThat(result.isError(), is(true));

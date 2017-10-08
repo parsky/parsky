@@ -3,34 +3,32 @@ package org.parsky.sequence;
 import org.parsky.sequence.model.MatchResult;
 import org.parsky.sequence.model.SequenceMatcherRequest;
 import org.parsky.sequence.model.SequenceMatcherResult;
-import org.parsky.sequence.model.tree.ListNode;
-import org.parsky.sequence.model.tree.Node;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConsecutiveSequenceMatcher implements SequenceMatcher {
-    private final List<SequenceMatcher> sequenceMatchers;
+public class ConsecutiveSequenceMatcher<C, R> implements SequenceMatcher<C, List<R>> {
+    private final List<SequenceMatcher<C, R>> sequenceMatchers;
 
-    public ConsecutiveSequenceMatcher(List<SequenceMatcher> sequenceMatchers) {
+    public ConsecutiveSequenceMatcher(List<SequenceMatcher<C, R>> sequenceMatchers) {
         this.sequenceMatchers = sequenceMatchers;
     }
 
     @Override
-    public SequenceMatcherResult matches(SequenceMatcherRequest sequenceMatcherRequest) {
+    public SequenceMatcherResult<List<R>> matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
         int jump = 0;
-        List<Node> nodes = new ArrayList<>();
+        List<R> nodes = new ArrayList<>();
 
-        for (SequenceMatcher sequenceMatcher : sequenceMatchers) {
-            SequenceMatcherResult result = sequenceMatcher.matches(sequenceMatcherRequest.incrementOffset(jump));
+        for (SequenceMatcher<C, R> sequenceMatcher : sequenceMatchers) {
+            SequenceMatcherResult<R> result = sequenceMatcher.matches(sequenceMatcherRequest.incrementOffset(jump));
 
-            if (result.isError()) return result;
-            if (!result.matched()) return SequenceMatcherResult.<ListNode>mismatch();
+            if (result.isError()) return SequenceMatcherResult.error(sequenceMatcherRequest);
+            if (!result.matched()) return SequenceMatcherResult.mismatch();
 
             jump += result.getJump();
-            nodes.add(result.getMatchResult().getNode());
+            nodes.add(result.getMatchResult().getValue());
         }
 
-        return SequenceMatcherResult.match(jump, new MatchResult(sequenceMatcherRequest.range(jump), new ListNode(nodes)));
+        return SequenceMatcherResult.match(jump, new MatchResult<>(sequenceMatcherRequest.range(jump), nodes));
     }
 }

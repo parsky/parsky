@@ -1,93 +1,40 @@
 package org.parsky.sequence.transform;
 
 import com.google.common.base.Function;
+import org.hamcrest.FeatureMatcher;
 import org.junit.Test;
-import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
-import org.parsky.sequence.model.MatchResult;
-import org.parsky.sequence.model.tree.ContentNode;
-import org.parsky.sequence.model.tree.ListNode;
-import org.parsky.sequence.model.tree.Node;
+import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
+import org.parsky.sequence.model.Range;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.ArrayList;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 public class ListContentTransformationTest {
     @Test
-    public void contentNode() throws Exception {
+    public void transform() throws Exception {
         String content = "test";
-        ContentNode<String> contentNode = new ContentNode<>(content);
+        Function<ListContentTransformation.Request<Object>, String> function = mock(Function.class);
+        ListContentTransformation<Object, String> underTest = new ListContentTransformation<>(function);
+        ArrayList<Object> input = new ArrayList<>();
 
-        Function<ListContentTransformation.Request, String> function = mock(Function.class);
-        MatchResult matchResult = mock(MatchResult.class);
+        given(function.apply(argThat(requestWithValues(input)))).willReturn(content);
 
+        Object result = underTest.transform(mock(Range.class), input);
 
-        given(matchResult.getNode()).willReturn(contentNode);
-        given(function.apply((ListContentTransformation.Request) argThat(new ReflectionEquals(new ListContentTransformation.Request(matchResult, Collections.singletonList((Object) content))))))
-                .willReturn("result");
-
-        ListContentTransformation underTest = new ListContentTransformation<>(function);
-
-        ContentNode<String> result = underTest.transform(matchResult);
-
-        assertThat(result.getContent(), is("result"));
+        assertEquals(result, content);
     }
 
-    @Test
-    public void listNode() throws Exception {
-
-        String content = "test";
-        ContentNode<String> contentNode = new ContentNode<>(content);
-
-        Function<ListContentTransformation.Request, String> function = mock(Function.class);
-        MatchResult matchResult = mock(MatchResult.class);
-
-
-        given(matchResult.getNode()).willReturn(new ListNode(Arrays.<Node>asList(contentNode)));
-        given(function.apply((ListContentTransformation.Request) argThat(new ReflectionEquals(new ListContentTransformation.Request(matchResult, Collections.singletonList((Object) content))))))
-                .willReturn("result");
-
-        ListContentTransformation underTest = new ListContentTransformation<>(function);
-
-        ContentNode<String> result = underTest.transform(matchResult);
-
-        assertThat(result.getContent(), is("result"));
-
-    }
-
-    @Test
-    public void textNode() throws Exception {
-        Function<ListContentTransformation.Request, String> function = mock(Function.class);
-        MatchResult matchResult = mock(MatchResult.class);
-
-
-        given(matchResult.getNode()).willReturn(new ContentNode<>("test"));
-        given(function.apply((ListContentTransformation.Request) argThat(new ReflectionEquals(new ListContentTransformation.Request(matchResult, Collections.singletonList((Object) "test"))))))
-                .willReturn("result");
-
-        ListContentTransformation underTest = new ListContentTransformation<>(function);
-
-        ContentNode<String> result = underTest.transform(matchResult);
-
-        assertThat(result.getContent(), is("result"));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void anotherNodeType() throws Exception {
-        Function<ListContentTransformation.Request, String> function = mock(Function.class);
-        MatchResult matchResult = mock(MatchResult.class);
-
-
-        given(matchResult.getNode()).willReturn(mock(Node.class));
-        given(function.apply((ListContentTransformation.Request) argThat(new ReflectionEquals(new ListContentTransformation.Request(matchResult, Collections.singletonList((Object) "test"))))))
-                .willReturn("result");
-
-        ListContentTransformation underTest = new ListContentTransformation<>(function);
-        underTest.transform(matchResult);
+    private HamcrestArgumentMatcher<ListContentTransformation.Request<Object>> requestWithValues(final Object input) {
+        return new HamcrestArgumentMatcher<>(new FeatureMatcher<ListContentTransformation.Request<Object>, Object>(is(input), "list", "list") {
+            @Override
+            protected Object featureValueOf(ListContentTransformation.Request<Object> request) {
+                return request.getValues();
+            }
+        });
     }
 }

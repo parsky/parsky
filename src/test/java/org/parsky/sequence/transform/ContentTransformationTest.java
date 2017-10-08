@@ -1,11 +1,14 @@
 package org.parsky.sequence.transform;
 
 import com.google.common.base.Function;
+import org.hamcrest.FeatureMatcher;
+import org.hamcrest.Matcher;
 import org.junit.Test;
-import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
-import org.parsky.sequence.model.MatchResult;
-import org.parsky.sequence.model.tree.ContentNode;
+import org.mockito.ArgumentMatcher;
+import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
+import org.parsky.sequence.model.Range;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -18,16 +21,21 @@ public class ContentTransformationTest {
 
     @Test
     public void transform() throws Exception {
-        ContentNode<String> node = new ContentNode<>("test");
+        given(function.apply(argThat(requestWithContent(equalTo("test"))))).willReturn("result");
 
-        MatchResult matchResult = mock(MatchResult.class);
+        String result = underTest.transform(mock(Range.class), "test");
 
-        given(matchResult.getNode()).willReturn(node);
-        given(function.apply((ContentTransformation.Request) argThat(new ReflectionEquals(new ContentTransformation.Request<>(matchResult, "test")))))
-                .willReturn("wow");
-
-        ContentNode<String> result = underTest.transform(matchResult);
-
-        assertThat(result.getContent(), is("wow"));
+        assertThat(result, is("result"));
     }
+
+    private ArgumentMatcher<ContentTransformation.Request> requestWithContent(Matcher matcher) {
+        return new HamcrestArgumentMatcher<>(new FeatureMatcher<ContentTransformation.Request, Object>(matcher, "value", "value") {
+            @Override
+            protected Object featureValueOf(ContentTransformation.Request request) {
+                return request.getValue();
+            }
+        });
+    }
+
+
 }

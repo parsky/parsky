@@ -1,10 +1,9 @@
 package org.parsky.sequence.transform;
 
 import com.google.common.base.Function;
-import org.parsky.sequence.model.MatchResult;
-import org.parsky.sequence.model.tree.ContentNode;
+import org.parsky.sequence.model.Range;
 
-public class ContentTransformation<I, T> implements Transformation<T> {
+public class ContentTransformation<I, T> implements Transformation<I, T> {
     private final Function<Request<I>, T> function;
 
     public ContentTransformation(Function<Request<I>, T> function) {
@@ -12,24 +11,21 @@ public class ContentTransformation<I, T> implements Transformation<T> {
     }
 
     @Override
-    public ContentNode<T> transform(MatchResult matchResult) {
-        return new ContentNode<>(function.apply(new Request<>(
-                matchResult,
-                ((ContentNode<I>) matchResult.getNode()).getContent()
-        )));
+    public T transform(Range range, I input) {
+        return function.apply(new Request<I>(range, input));
     }
 
     public static class Request<V> {
-        private final MatchResult matchResult;
+        private final Range range;
         private final V value;
 
-        public Request(MatchResult matchResult, V value) {
-            this.matchResult = matchResult;
+        public Request(Range range, V value) {
+            this.range = range;
             this.value = value;
         }
 
-        public MatchResult getMatchResult() {
-            return matchResult;
+        public Range getRange() {
+            return range;
         }
 
         public V getValue() {

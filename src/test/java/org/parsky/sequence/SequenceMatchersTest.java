@@ -27,10 +27,10 @@ public class SequenceMatchersTest {
         assertThat(SequenceMatchers.until("label", mock(SequenceMatcher.class)), instanceOf(LabelledSequenceMatcher.class));
         assertThat(SequenceMatchers.firstOf(mock(SequenceMatcher.class)), instanceOf(FirstOfSequenceMatcher.class));
         assertThat(SequenceMatchers.firstOf("label", mock(SequenceMatcher.class)), instanceOf(LabelledSequenceMatcher.class));
-        assertThat(SequenceMatchers.firstOf(Collections.singletonList(mock(SequenceMatcher.class))), instanceOf(FirstOfSequenceMatcher.class));
-        assertThat(SequenceMatchers.firstOf("label", Collections.singletonList(mock(SequenceMatcher.class))), instanceOf(LabelledSequenceMatcher.class));
-        assertThat(SequenceMatchers.sequence(Collections.singletonList(mock(SequenceMatcher.class))), instanceOf(ConsecutiveSequenceMatcher.class));
-        assertThat(SequenceMatchers.sequence("label", Collections.singletonList(mock(SequenceMatcher.class))), instanceOf(LabelledSequenceMatcher.class));
+        assertThat(SequenceMatchers.firstOf(Collections.<SequenceMatcher<Object, Object>>singletonList(mock(SequenceMatcher.class))), instanceOf(FirstOfSequenceMatcher.class));
+        assertThat(SequenceMatchers.firstOf("label", Collections.<SequenceMatcher<Object, Object>>singletonList(mock(SequenceMatcher.class))), instanceOf(LabelledSequenceMatcher.class));
+        assertThat(SequenceMatchers.sequence(Collections.<SequenceMatcher<Object, Object>>singletonList(mock(SequenceMatcher.class))), instanceOf(ConsecutiveSequenceMatcher.class));
+        assertThat(SequenceMatchers.sequence("label", Collections.<SequenceMatcher<Object, Object>>singletonList(mock(SequenceMatcher.class))), instanceOf(LabelledSequenceMatcher.class));
         assertThat(SequenceMatchers.sequence(mock(SequenceMatcher.class)), instanceOf(ConsecutiveSequenceMatcher.class));
         assertThat(SequenceMatchers.sequence("label", mock(SequenceMatcher.class)), instanceOf(LabelledSequenceMatcher.class));
         assertThat(SequenceMatchers.not(mock(SequenceMatcher.class)), instanceOf(NotSequenceMatcher.class));
@@ -38,7 +38,7 @@ public class SequenceMatchersTest {
         assertThat(SequenceMatchers.transform(mock(SequenceMatcher.class), mock(Transformation.class)), instanceOf(TransformSequenceMatcher.class));
         assertThat(SequenceMatchers.transform("label", mock(SequenceMatcher.class), mock(Transformation.class)), instanceOf(LabelledSequenceMatcher.class));
         assertThat(SequenceMatchers.matchedText(mock(SequenceMatcher.class)), instanceOf(MatchedTextSequenceMatcher.class));
-        assertThat(SequenceMatchers.whitespaces(), instanceOf(ZeroOrMoreSequenceMatcher.class));
+        assertThat(SequenceMatchers.whitespaces(), instanceOf(MatchedTextSequenceMatcher.class));
         assertThat(SequenceMatchers.skipWhitespaces(mock(SequenceMatcher.class)), instanceOf(SkipWhiteSpacesSequenceMatcher.class));
         assertThat(SequenceMatchers.optional(mock(SequenceMatcher.class)), instanceOf(OptionalSequenceMatcher.class));
         assertThat(SequenceMatchers.optional("label", mock(SequenceMatcher.class)), instanceOf(LabelledSequenceMatcher.class));

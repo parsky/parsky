@@ -1,23 +1,19 @@
 package org.parsky.sequence.transform;
 
 import org.junit.Test;
-import org.parsky.sequence.model.MatchResult;
-import org.parsky.sequence.model.tree.ContentNode;
+import org.parsky.sequence.model.Range;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.BDDMockito.given;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
 public class CastTransformationTest {
+    private final CastTransformation<String> underTest = new CastTransformation<>(String.class);
+
     @Test
     public void cast() throws Exception {
-        MatchResult matchResult = mock(MatchResult.class);
+        String result = underTest.transform(mock(Range.class), "test");
 
-        given(matchResult.getNode()).willReturn(new ContentNode<>("test"));
-
-        ContentNode<String> result = new CastTransformation<>(String.class)
-                .transform(matchResult);
-
-        assertEquals("test", result.getContent());
+        assertThat(result, is("test"));
     }
 }

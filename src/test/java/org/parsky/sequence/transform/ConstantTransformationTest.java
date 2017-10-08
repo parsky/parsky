@@ -1,19 +1,19 @@
 package org.parsky.sequence.transform;
 
 import org.junit.Test;
-import org.parsky.sequence.model.MatchResult;
-import org.parsky.sequence.model.tree.ContentNode;
+import org.parsky.sequence.model.Range;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
 public class ConstantTransformationTest {
     @Test
     public void transform() throws Exception {
+        ConstantTransformation<Object, String> underTest = new ConstantTransformation<>("test");
 
-        ConstantTransformation<String> underTest = new ConstantTransformation<>("test");
-        ContentNode<String> result = underTest.transform(mock(MatchResult.class));
+        String result = underTest.transform(mock(Range.class), new Object());
 
-        assertEquals("test", result.getContent());
+        assertThat(result, is("test"));
     }
 }

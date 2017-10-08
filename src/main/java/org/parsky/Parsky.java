@@ -1,29 +1,25 @@
 package org.parsky;
 
-import org.parsky.sequence.TypedSequenceMatcher;
+import org.parsky.sequence.SequenceMatcher;
 import org.parsky.sequence.model.SequenceMatcherRequest;
 import org.parsky.sequence.model.SequenceMatcherResult;
-import org.parsky.sequence.model.tree.ContentNode;
 
-public class Parsky<T> {
-    private final Class<T> type;
-    private final TypedSequenceMatcher<T> matcher;
+public class Parsky<C, T> {
+    private final SequenceMatcher<C, T> matcher;
 
-    public Parsky(Class<T> type, TypedSequenceMatcher<T> matcher) {
-        this.type = type;
+    public Parsky(SequenceMatcher<C, T> matcher) {
         this.matcher = matcher;
     }
 
-    public Result<T> parse (String input) {
-        return new Result<>(type, matcher.matches(new SequenceMatcherRequest(input.toCharArray(), 0)));
+    public Result<T> parse (C context, String input) {
+        SequenceMatcherRequest<C> request = new SequenceMatcherRequest<>(input.toCharArray(), 0, context);
+        return new Result<>(matcher.matches(request));
     }
 
     public static class Result<T> {
-        private final Class<T> type;
-        private final SequenceMatcherResult result;
+        private final SequenceMatcherResult<T> result;
 
-        public Result(Class<T> type, SequenceMatcherResult result) {
-            this.type = type;
+        public Result(SequenceMatcherResult<T> result) {
             this.result = result;
         }
 
@@ -40,7 +36,7 @@ public class Parsky<T> {
         }
 
         public  T output () {
-            return type.cast(((ContentNode) result.getMatchResult().getNode()).getContent());
+            return result.getMatchResult().getValue();
         }
     }
 }
