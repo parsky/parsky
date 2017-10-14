@@ -10,9 +10,9 @@ import static org.mockito.Mockito.mock;
 public class ConstantTransformationTest {
     @Test
     public void transform() throws Exception {
-        ConstantTransformation<Object, String> underTest = new ConstantTransformation<>("test");
+        ConstantTransformation<Object, Object, String> underTest = new ConstantTransformation<>("test");
 
-        String result = underTest.transform(mock(Range.class), new Object());
+        String result = underTest.transform(new Object(), mock(Range.class), new Object());
 
         assertThat(result, is("test"));
     }

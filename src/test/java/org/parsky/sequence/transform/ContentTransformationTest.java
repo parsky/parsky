@@ -16,14 +16,14 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 public class ContentTransformationTest {
-    private final Function<ContentTransformation.Request<String>, String> function = mock(Function.class);
-    private ContentTransformation<String, String> underTest = new ContentTransformation<>(function);
+    private final Function<ContentTransformation.Request<Object, String>, String> function = mock(Function.class);
+    private ContentTransformation<Object, String, String> underTest = new ContentTransformation<>(function);
 
     @Test
     public void transform() throws Exception {
         given(function.apply(argThat(requestWithContent(equalTo("test"))))).willReturn("result");
 
-        String result = underTest.transform(mock(Range.class), "test");
+        String result = underTest.transform(new Object(), mock(Range.class), "test");
 
         assertThat(result, is("result"));
     }

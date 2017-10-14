@@ -2,7 +2,7 @@ package org.parsky.sequence.transform;
 
 import org.parsky.sequence.model.Range;
 
-public class ConstantTransformation<V, T> implements Transformation<V, T> {
+public class ConstantTransformation<C, V, T> implements Transformation<C, V, T> {
     private final T value;
 
     public ConstantTransformation(T value) {
@@ -10,7 +10,7 @@ public class ConstantTransformation<V, T> implements Transformation<V, T> {
     }
 
     @Override
-    public T transform(Range range, Object input) {
+    public T transform(C context, Range range, V input) {
         return value;
     }
 }

@@ -11,7 +11,7 @@ public class IdentityTransformationTest {
     public void transform() throws Exception {
         Object input = new Object();
         Object result = new IdentityTransformation<>()
-                .transform(mock(Range.class), input);
+                .transform(new Object(), mock(Range.class), input);
 
         assertSame(input, result);
     }

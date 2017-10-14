@@ -18,21 +18,21 @@ public class ListContentTransformationTest {
     @Test
     public void transform() throws Exception {
         String content = "test";
-        Function<ListContentTransformation.Request<Object>, String> function = mock(Function.class);
-        ListContentTransformation<Object, String> underTest = new ListContentTransformation<>(function);
+        Function<ListContentTransformation.Request<Object, Object>, String> function = mock(Function.class);
+        ListContentTransformation<Object, Object, String> underTest = new ListContentTransformation<>(function);
         ArrayList<Object> input = new ArrayList<>();
 
         given(function.apply(argThat(requestWithValues(input)))).willReturn(content);
 
-        Object result = underTest.transform(mock(Range.class), input);
+        Object result = underTest.transform(new Object(), mock(Range.class), input);
 
         assertEquals(result, content);
     }
 
-    private HamcrestArgumentMatcher<ListContentTransformation.Request<Object>> requestWithValues(final Object input) {
-        return new HamcrestArgumentMatcher<>(new FeatureMatcher<ListContentTransformation.Request<Object>, Object>(is(input), "list", "list") {
+    private HamcrestArgumentMatcher<ListContentTransformation.Request<Object, Object>> requestWithValues(final Object input) {
+        return new HamcrestArgumentMatcher<>(new FeatureMatcher<ListContentTransformation.Request<Object, Object>, Object>(is(input), "list", "list") {
             @Override
-            protected Object featureValueOf(ListContentTransformation.Request<Object> request) {
+            protected Object featureValueOf(ListContentTransformation.Request<Object, Object> request) {
                 return request.getValues();
             }
         });

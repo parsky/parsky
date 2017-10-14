@@ -21,23 +21,25 @@ public class LabelledTransformationTest {
     public void transform() throws Exception {
         Object input = new Object();
         Object transformationResult = new Object();
+        Object context = new Object();
         Range range = mock(Range.class);
 
-        given(transformation.transform(range, input)).willReturn(transformationResult);
+        given(transformation.transform(context, range, input)).willReturn(transformationResult);
 
-        Object result = underTest.transform(range, input);
+        Object result = underTest.transform(context, range, input);
 
         assertSame(result, transformationResult);
     }
     @Test
     public void transformException() throws Exception {
         Object input = new Object();
+        Object context = new Object();
         Range range = mock(Range.class);
 
-        given(transformation.transform(range, input)).willThrow(new RuntimeException());
+        given(transformation.transform(context, range, input)).willThrow(new RuntimeException());
 
         expectedException.expectMessage(label);
 
-        underTest.transform(range, input);
+        underTest.transform(context, range, input);
     }
 }

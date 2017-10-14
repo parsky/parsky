@@ -32,9 +32,9 @@ public class InfixExpressionsSequenceMatcherFactoryTest {
                         )
                         .withExpressionParser(SequenceMatchers.transform("expression", SequenceMatchers.skipWhitespaces(SequenceMatchers.matchedText(
                                 SequenceMatchers.oneOrMore(SequenceMatchers.match(CharacterMatchers.range('0', '9')))
-                                )), Transformations.fromString(new Function<ContentTransformation.Request<String>, Expression>() {
+                                )), Transformations.fromString(new Function<ContentTransformation.Request<Object, String>, Expression>() {
                                     @Override
-                                    public Expression apply(ContentTransformation.Request<String> input) {
+                                    public Expression apply(ContentTransformation.Request<Object, String> input) {
                                         return new Number(Integer.parseInt(input.getValue()));
                                     }
                                 }))

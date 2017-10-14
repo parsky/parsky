@@ -5,25 +5,31 @@ import org.parsky.sequence.model.Range;
 
 import java.util.List;
 
-public class ListContentTransformation<I, T> implements Transformation<List<I>, T> {
-    private final Function<Request<I>, T> function;
+public class ListContentTransformation<C, I, T> implements Transformation<C, List<I>, T> {
+    private final Function<Request<C, I>, T> function;
 
-    public ListContentTransformation(Function<Request<I>, T> function) {
+    public ListContentTransformation(Function<Request<C, I>, T> function) {
         this.function = function;
     }
 
     @Override
-    public T transform(Range range, List<I> input) {
-        return function.apply(new Request<I>(range, input));
+    public T transform(C context, Range range, List<I> input) {
+        return function.apply(new Request<C, I>(context, range, input));
     }
 
-    public static class Request<I> {
+    public static class Request<C, I> {
+        private final C context;
         private final Range range;
         private final List<I> values;
 
-        public Request(Range range, List<I> values) {
+        public Request(C context, Range range, List<I> values) {
+            this.context = context;
             this.range = range;
             this.values = values;
+        }
+
+        public C getContext() {
+            return context;
         }
 
         public <T extends I> T get (int index, Class<T> type) {

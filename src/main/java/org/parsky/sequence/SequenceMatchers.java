@@ -99,11 +99,11 @@ public class SequenceMatchers {
         return new LabelledSequenceMatcher<>(label, not(sequenceMatcher));
     }
 
-    public static <C, I, O> SequenceMatcher<C, O> transform (SequenceMatcher<C, I> sequenceMatcher, Transformation<I, O> transform) {
+    public static <C, I, O> SequenceMatcher<C, O> transform (SequenceMatcher<C, I> sequenceMatcher, Transformation<C, I, O> transform) {
         return new TransformSequenceMatcher<>(sequenceMatcher, transform);
     }
 
-    public static <C, I, O> SequenceMatcher<C, O> transform (String label, SequenceMatcher<C, I> sequenceMatcher, Transformation<I, O> transform) {
+    public static <C, I, O> SequenceMatcher<C, O> transform (String label, SequenceMatcher<C, I> sequenceMatcher, Transformation<C, I, O> transform) {
         return new LabelledSequenceMatcher<>(label, transform(sequenceMatcher, transform));
     }
 

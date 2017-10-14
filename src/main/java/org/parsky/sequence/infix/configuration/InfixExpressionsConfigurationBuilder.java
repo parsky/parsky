@@ -47,7 +47,7 @@ public class InfixExpressionsConfigurationBuilder<Context, Expression, InfixExpr
 
     public InfixExpressionsConfigurationBuilder<Context, Expression, InfixExpression> withInfix (String symbol, InfixExpression expression, int precedence) {
         this.infixExpressionConfigurations.add(new InfixExpressionConfiguration<Context, InfixExpression>(
-                SequenceMatchers.<Context, String, InfixExpression>transform("infix " + symbol, SequenceMatchers.<Context>string(symbol), Transformations.<String, InfixExpression>constant(expression)),
+                SequenceMatchers.<Context, String, InfixExpression>transform("infix " + symbol, SequenceMatchers.<Context>string(symbol), Transformations.<Context, String, InfixExpression>constant(expression)),
                 precedence
         ));
         return this;
