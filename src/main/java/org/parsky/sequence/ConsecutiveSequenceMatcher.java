@@ -7,20 +7,20 @@ import org.parsky.sequence.model.SequenceMatcherResult;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConsecutiveSequenceMatcher<C, R> implements SequenceMatcher<C, List<R>> {
-    private final List<SequenceMatcher<C, R>> sequenceMatchers;
+public class ConsecutiveSequenceMatcher<C> implements SequenceMatcher<C> {
+    private final List<SequenceMatcher<C>> sequenceMatchers;
 
-    public ConsecutiveSequenceMatcher(List<SequenceMatcher<C, R>> sequenceMatchers) {
+    public ConsecutiveSequenceMatcher(List<SequenceMatcher<C>> sequenceMatchers) {
         this.sequenceMatchers = sequenceMatchers;
     }
 
     @Override
-    public SequenceMatcherResult<List<R>> matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
+    public SequenceMatcherResult matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
         int jump = 0;
-        List<R> nodes = new ArrayList<>();
+        List<Object> nodes = new ArrayList<>();
 
-        for (SequenceMatcher<C, R> sequenceMatcher : sequenceMatchers) {
-            SequenceMatcherResult<R> result = sequenceMatcher.matches(sequenceMatcherRequest.incrementOffset(jump));
+        for (SequenceMatcher<C> sequenceMatcher : sequenceMatchers) {
+            SequenceMatcherResult result = sequenceMatcher.matches(sequenceMatcherRequest.incrementOffset(jump));
 
             if (result.isError()) return SequenceMatcherResult.error(sequenceMatcherRequest);
             if (!result.matched()) return SequenceMatcherResult.mismatch();
@@ -29,6 +29,6 @@ public class ConsecutiveSequenceMatcher<C, R> implements SequenceMatcher<C, List
             nodes.add(result.getMatchResult().getValue());
         }
 
-        return SequenceMatcherResult.match(jump, new MatchResult<>(sequenceMatcherRequest.range(jump), nodes));
+        return SequenceMatcherResult.match(jump, new MatchResult(sequenceMatcherRequest.range(jump), nodes));
     }
 }

@@ -2,9 +2,9 @@ package org.parsky.sequence.transform;
 
 import org.parsky.sequence.model.Range;
 
-public class IdentityTransformation<C, T> implements Transformation<C, T, T> {
+public class IdentityTransformation<C> implements Transformation<C> {
     @Override
-    public T transform(C context, Range range, T input) {
+    public Object transform(C context, Range range, Object input) {
         return input;
     }
 }

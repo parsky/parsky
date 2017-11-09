@@ -2,15 +2,15 @@ package org.parsky.sequence.transform;
 
 import org.parsky.sequence.model.Range;
 
-public class ConstantTransformation<C, V, T> implements Transformation<C, V, T> {
-    private final T value;
+public class ConstantTransformation<C> implements Transformation<C> {
+    private final Object value;
 
-    public ConstantTransformation(T value) {
+    public ConstantTransformation(Object value) {
         this.value = value;
     }
 
     @Override
-    public T transform(C context, Range range, V input) {
+    public Object transform(C context, Range range, Object input) {
         return value;
     }
 }

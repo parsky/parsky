@@ -2,7 +2,7 @@ package org.parsky.sequence.transform;
 
 import org.parsky.sequence.model.Range;
 
-public class CastTransformation<C, T> implements Transformation<C, Object, T> {
+public class CastTransformation<C, T> implements Transformation<C> {
     private final Class<T> type;
 
     public CastTransformation(Class<T> type) {

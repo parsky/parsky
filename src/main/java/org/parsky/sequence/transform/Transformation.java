@@ -3,6 +3,6 @@ package org.parsky.sequence.transform;
 
 import org.parsky.sequence.model.Range;
 
-public interface Transformation<C, I, O> {
-    O transform(C context, Range range, I input);
+public interface Transformation<C> {
+    Object transform(C context, Range range, Object input);
 }

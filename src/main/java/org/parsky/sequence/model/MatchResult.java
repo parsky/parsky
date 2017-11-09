@@ -1,10 +1,10 @@
 package org.parsky.sequence.model;
 
-public class MatchResult<T> {
+public class MatchResult {
     private final Range range;
-    private final T value;
+    private final Object value;
 
-    public MatchResult(Range range, T value) {
+    public MatchResult(Range range, Object value) {
         this.range = range;
         this.value = value;
     }
@@ -13,11 +13,15 @@ public class MatchResult<T> {
         return range;
     }
 
-    public <R> MatchResult<R> with (R newValue) {
-        return new MatchResult<>(range, newValue);
+    public MatchResult with (Object newValue) {
+        return new MatchResult(range, newValue);
     }
 
-    public T getValue() {
+    public Object getValue() {
         return value;
+    }
+
+    public <T> T as (Class<T> type) {
+        return type.cast(value);
     }
 }

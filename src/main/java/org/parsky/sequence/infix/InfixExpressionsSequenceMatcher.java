@@ -11,17 +11,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
-public class InfixExpressionsSequenceMatcher<C, Expression, InfixExpression> implements SequenceMatcher<C, Expression> {
-    private final SequenceMatcher<C, Expression> matcher;
+public class InfixExpressionsSequenceMatcher<C, Expression, InfixExpression> implements SequenceMatcher<C> {
+    private final SequenceMatcher<C> matcher;
 
     public InfixExpressionsSequenceMatcher (InfixExpressionsConfiguration<C, Expression, InfixExpression> configuration) {
         this.matcher = create(configuration);
     }
 
-    private SequenceMatcher<C, Expression> create(InfixExpressionsConfiguration<C, Expression, InfixExpression> configuration) {
-        TreeMap<Integer, List<SequenceMatcher<C, InfixExpression>>> precedenceMap = getPrecedenceMap(configuration);
+    private SequenceMatcher<C> create(InfixExpressionsConfiguration<C, Expression, InfixExpression> configuration) {
+        TreeMap<Integer, List<SequenceMatcher<C>>> precedenceMap = getPrecedenceMap(configuration);
 
-        SequenceMatcher<C, Expression> expressionParser = configuration.getExpressionParser();
+        SequenceMatcher<C> expressionParser = configuration.getExpressionParser();
         for (Integer precedence : precedenceMap.keySet()) {
             expressionParser = new InfixExpressionSequenceMatcher<>(
                     configuration.getCombinedExpressionFactory(),
@@ -33,11 +33,11 @@ public class InfixExpressionsSequenceMatcher<C, Expression, InfixExpression> imp
         return expressionParser;
     }
 
-    private TreeMap<Integer, List<SequenceMatcher<C, InfixExpression>>> getPrecedenceMap(InfixExpressionsConfiguration<C, Expression, InfixExpression> configuration) {
-        TreeMap<Integer, List<SequenceMatcher<C, InfixExpression>>> precedenceMap = new TreeMap<>();
-        for (InfixExpressionConfiguration<C, InfixExpression> infixExpressionConfiguration : configuration.getInfixExpressionConfigurations()) {
+    private TreeMap<Integer, List<SequenceMatcher<C>>> getPrecedenceMap(InfixExpressionsConfiguration<C, Expression, InfixExpression> configuration) {
+        TreeMap<Integer, List<SequenceMatcher<C>>> precedenceMap = new TreeMap<>();
+        for (InfixExpressionConfiguration<C> infixExpressionConfiguration : configuration.getInfixExpressionConfigurations()) {
             if (!precedenceMap.containsKey(infixExpressionConfiguration.getPrecedence()))
-                precedenceMap.put(infixExpressionConfiguration.getPrecedence(), new ArrayList<SequenceMatcher<C, InfixExpression>>());
+                precedenceMap.put(infixExpressionConfiguration.getPrecedence(), new ArrayList<SequenceMatcher<C>>());
 
             precedenceMap.get(infixExpressionConfiguration.getPrecedence())
                     .add(infixExpressionConfiguration.getSequenceMatcher());
@@ -46,7 +46,7 @@ public class InfixExpressionsSequenceMatcher<C, Expression, InfixExpression> imp
     }
 
     @Override
-    public SequenceMatcherResult<Expression> matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
+    public SequenceMatcherResult matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
         return matcher.matches(sequenceMatcherRequest);
     }
 }

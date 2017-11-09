@@ -3,16 +3,16 @@ package org.parsky.sequence.infix.configuration;
 
 import org.parsky.sequence.SequenceMatcher;
 
-public class InfixExpressionConfiguration<Context, InfixExpression> {
-    private final SequenceMatcher<Context, InfixExpression> sequenceMatcher;
+public class InfixExpressionConfiguration<Context> {
+    private final SequenceMatcher<Context> sequenceMatcher;
     private final int precedence;
 
-    public InfixExpressionConfiguration(SequenceMatcher<Context, InfixExpression> sequenceMatcher, int precedence) {
+    public InfixExpressionConfiguration(SequenceMatcher<Context> sequenceMatcher, int precedence) {
         this.sequenceMatcher = sequenceMatcher;
         this.precedence = precedence;
     }
 
-    public SequenceMatcher<Context, InfixExpression> getSequenceMatcher() {
+    public SequenceMatcher<Context> getSequenceMatcher() {
         return sequenceMatcher;
     }
 

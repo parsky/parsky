@@ -20,7 +20,7 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 public class InfixExpressionsSequenceMatcherFactoryTest {
     @Test
     public void integrationTest() throws Exception {
-        SequenceMatcher<Object, Expression> binaryOperation = new InfixExpressionsSequenceMatcher<>(
+        SequenceMatcher<Object> binaryOperation = new InfixExpressionsSequenceMatcher<>(
                 InfixExpressionsConfigurationBuilder.<Object, Expression, Operator>infixExpressionsConfiguration()
                         .withCombinedExpressionFactory(
                                 new CombinedExpressionFactory<Expression, Operator>() {

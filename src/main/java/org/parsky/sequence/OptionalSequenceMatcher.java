@@ -3,16 +3,16 @@ package org.parsky.sequence;
 import org.parsky.sequence.model.SequenceMatcherRequest;
 import org.parsky.sequence.model.SequenceMatcherResult;
 
-public class OptionalSequenceMatcher<C, R> implements SequenceMatcher<C, R> {
-    private final SequenceMatcher<C, R> sequenceMatcher;
+public class OptionalSequenceMatcher<C> implements SequenceMatcher<C> {
+    private final SequenceMatcher<C> sequenceMatcher;
 
-    public OptionalSequenceMatcher(SequenceMatcher<C, R> sequenceMatcher) {
+    public OptionalSequenceMatcher(SequenceMatcher<C> sequenceMatcher) {
         this.sequenceMatcher = sequenceMatcher;
     }
 
     @Override
-    public SequenceMatcherResult<R> matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
-        SequenceMatcherResult<R> result = sequenceMatcher.matches(sequenceMatcherRequest);
+    public SequenceMatcherResult matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
+        SequenceMatcherResult result = sequenceMatcher.matches(sequenceMatcherRequest);
 
         if (result.isMismatch()) return sequenceMatcherRequest.empty();
 

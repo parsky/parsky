@@ -7,20 +7,20 @@ import org.parsky.sequence.model.SequenceMatcherResult;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OneOrMoreSequenceMatcher<C, R> implements SequenceMatcher<C, List<R>> {
-    private final SequenceMatcher<C, R> sequenceMatcher;
+public class OneOrMoreSequenceMatcher<C> implements SequenceMatcher<C> {
+    private final SequenceMatcher<C> sequenceMatcher;
 
-    public OneOrMoreSequenceMatcher(SequenceMatcher<C, R> sequenceMatcher) {
+    public OneOrMoreSequenceMatcher(SequenceMatcher<C> sequenceMatcher) {
         this.sequenceMatcher = sequenceMatcher;
     }
 
     @Override
-    public SequenceMatcherResult<List<R>> matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
-        SequenceMatcherResult<R> result = sequenceMatcher.matches(sequenceMatcherRequest);
-        if (!result.matched()) return result.cast();
+    public SequenceMatcherResult matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
+        SequenceMatcherResult result = sequenceMatcher.matches(sequenceMatcherRequest);
+        if (!result.matched()) return result;
 
         int jump = 0;
-        List<R> nodes = new ArrayList<>();
+        List<Object> nodes = new ArrayList<>();
 
         while (result.matched()) {
             nodes.add(result.getMatchResult().getValue());

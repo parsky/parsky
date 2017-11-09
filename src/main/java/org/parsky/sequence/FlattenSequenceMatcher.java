@@ -7,22 +7,23 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class FlattenSequenceMatcher<C, R> implements SequenceMatcher<C, List<R>> {
-    private final SequenceMatcher<C, List<R>> sequenceMatcher;
+public class FlattenSequenceMatcher<C> implements SequenceMatcher<C> {
+    private final SequenceMatcher<C> sequenceMatcher;
 
-    public FlattenSequenceMatcher(SequenceMatcher<C, List<R>> sequenceMatcher) {
+    public FlattenSequenceMatcher(SequenceMatcher<C> sequenceMatcher) {
         this.sequenceMatcher = sequenceMatcher;
     }
 
     @Override
-    public SequenceMatcherResult<List<R>> matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
-        SequenceMatcherResult<List<R>> result = sequenceMatcher.matches(sequenceMatcherRequest);
+    public SequenceMatcherResult matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
+        SequenceMatcherResult result = sequenceMatcher.matches(sequenceMatcherRequest);
 
         if (result.matched()) {
             if (result.getMatchResult().getValue() != null) {
-                List<R> flatResult = new ArrayList<>();
+                List<Object> flatResult = new ArrayList<>();
                 if (result.getMatchResult().getValue() instanceof List) {
-                    for (R value : result.getMatchResult().getValue()) {
+                    List list = (List) result.getMatchResult().getValue();
+                    for (Object value : list) {
                         if (value instanceof List) {
                             flatResult.addAll((Collection) value);
                         } else {
@@ -30,7 +31,7 @@ public class FlattenSequenceMatcher<C, R> implements SequenceMatcher<C, List<R>>
                         }
                     }
                 } else {
-                    flatResult.add((R) result.getMatchResult().getValue());
+                    flatResult.add(result.getMatchResult().getValue());
                 }
                 return result.withValue(flatResult);
             }

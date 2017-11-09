@@ -1,11 +1,14 @@
 package org.parsky.sequence.transform;
 
 import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
 import org.parsky.sequence.model.Range;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-public class ListContentTransformation<C, I, T> implements Transformation<C, List<I>, T> {
+public class ListContentTransformation<C, I, T> implements Transformation<C> {
     private final Function<Request<C, I>, T> function;
 
     public ListContentTransformation(Function<Request<C, I>, T> function) {
@@ -13,8 +16,11 @@ public class ListContentTransformation<C, I, T> implements Transformation<C, Lis
     }
 
     @Override
-    public T transform(C context, Range range, List<I> input) {
-        return function.apply(new Request<C, I>(context, range, input));
+    public T transform(C context, Range range, Object input) {
+        if (input instanceof Collection) {
+            return function.apply(new Request<C, I>(context, range, new ArrayList<I>((Collection) input)));
+        }
+        return function.apply(new Request<C, I>(context, range, ImmutableList.<I>of((I) input)));
     }
 
     public static class Request<C, I> {

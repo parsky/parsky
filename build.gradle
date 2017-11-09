@@ -10,7 +10,7 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 group = "org.parsky"
-version = System.getenv("TRAVIS_TAG")
+version = System.getenv("TRAVIS_TAG") ?: "DEV"
 
 repositories {
     mavenLocal()

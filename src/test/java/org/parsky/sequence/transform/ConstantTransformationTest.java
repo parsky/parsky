@@ -3,17 +3,16 @@ package org.parsky.sequence.transform;
 import org.junit.Test;
 import org.parsky.sequence.model.Range;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
 public class ConstantTransformationTest {
     @Test
     public void transform() throws Exception {
-        ConstantTransformation<Object, Object, String> underTest = new ConstantTransformation<>("test");
+        ConstantTransformation<Object> underTest = new ConstantTransformation<>("test");
 
-        String result = underTest.transform(new Object(), mock(Range.class), new Object());
+        Object result = underTest.transform(new Object(), mock(Range.class), new Object());
 
-        assertThat(result, is("test"));
+        assertEquals(result, "test");
     }
 }

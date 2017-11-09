@@ -3,7 +3,7 @@ package org.parsky.sequence.transform;
 import com.google.common.base.Function;
 import org.parsky.sequence.model.Range;
 
-public class ContentTransformation<C, I, T> implements Transformation<C, I, T> {
+public class ContentTransformation<C, I, T> implements Transformation<C> {
     private final Function<Request<C, I>, T> function;
 
     public ContentTransformation(Function<Request<C, I>, T> function) {
@@ -11,8 +11,8 @@ public class ContentTransformation<C, I, T> implements Transformation<C, I, T> {
     }
 
     @Override
-    public T transform(C context, Range range, I input) {
-        return function.apply(new Request<C, I>(context, range, input));
+    public T transform(C context, Range range, Object input) {
+        return function.apply(new Request<>(context, range, (I) input));
     }
 
     public static class Request<C, V> {

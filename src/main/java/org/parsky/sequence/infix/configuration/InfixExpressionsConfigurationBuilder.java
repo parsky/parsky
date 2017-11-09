@@ -14,40 +14,40 @@ public class InfixExpressionsConfigurationBuilder<Context, Expression, InfixExpr
     }
 
     private CombinedExpressionFactory<Expression, InfixExpression> combinedExpressionFactory;
-    private SequenceMatcher<Context, Expression> expressionParser;
-    private final Collection<InfixExpressionConfiguration<Context, InfixExpression>> infixExpressionConfigurations = new ArrayList<>();
+    private SequenceMatcher<Context> expressionParser;
+    private final Collection<InfixExpressionConfiguration<Context>> infixExpressionConfigurations = new ArrayList<>();
 
     public InfixExpressionsConfigurationBuilder<Context, Expression, InfixExpression> withCombinedExpressionFactory(CombinedExpressionFactory<Expression, InfixExpression> combinedExpressionFactory) {
         this.combinedExpressionFactory = combinedExpressionFactory;
         return this;
     }
 
-    public InfixExpressionsConfigurationBuilder<Context, Expression, InfixExpression> withExpressionParser(SequenceMatcher<Context, Expression> expressionParser) {
+    public InfixExpressionsConfigurationBuilder<Context, Expression, InfixExpression> withExpressionParser(SequenceMatcher<Context> expressionParser) {
         this.expressionParser = expressionParser;
         return this;
     }
 
-    public InfixExpressionsConfigurationBuilder<Context, Expression, InfixExpression> withInfix (SequenceMatcher<Context, InfixExpression> sequenceMatcher, int precedence) {
-        this.infixExpressionConfigurations.add(new InfixExpressionConfiguration<Context, InfixExpression>(
+    public InfixExpressionsConfigurationBuilder<Context, Expression, InfixExpression> withInfix (SequenceMatcher<Context> sequenceMatcher, int precedence) {
+        this.infixExpressionConfigurations.add(new InfixExpressionConfiguration<Context>(
                 sequenceMatcher,
                 precedence
         ));
         return this;
     }
 
-    public InfixExpressionsConfigurationBuilder<Context, Expression, InfixExpression> withInfix (InfixExpressionConfiguration<Context, InfixExpression> infix) {
+    public InfixExpressionsConfigurationBuilder<Context, Expression, InfixExpression> withInfix (InfixExpressionConfiguration<Context> infix) {
         this.infixExpressionConfigurations.add(infix);
         return this;
     }
 
-    public InfixExpressionsConfigurationBuilder<Context, Expression, InfixExpression> withInfixExpressions (Collection<InfixExpressionConfiguration<Context, InfixExpression>> infixes) {
+    public InfixExpressionsConfigurationBuilder<Context, Expression, InfixExpression> withInfixExpressions (Collection<InfixExpressionConfiguration<Context>> infixes) {
         this.infixExpressionConfigurations.addAll(infixes);
         return this;
     }
 
     public InfixExpressionsConfigurationBuilder<Context, Expression, InfixExpression> withInfix (String symbol, InfixExpression expression, int precedence) {
-        this.infixExpressionConfigurations.add(new InfixExpressionConfiguration<Context, InfixExpression>(
-                SequenceMatchers.<Context, String, InfixExpression>transform("infix " + symbol, SequenceMatchers.<Context>string(symbol), Transformations.<Context, String, InfixExpression>constant(expression)),
+        this.infixExpressionConfigurations.add(new InfixExpressionConfiguration<Context>(
+                SequenceMatchers.<Context>transform("infix " + symbol, SequenceMatchers.<Context>string(symbol), Transformations.<Context, String, InfixExpression>constant(expression)),
                 precedence
         ));
         return this;

@@ -40,24 +40,24 @@ public class SequenceMatcherRequest<C> {
         return getCurrentCharacter() == EndOfInputCharacterMatcher.EOI;
     }
 
-    public <T> SequenceMatcherResult<T> empty () {
-        return new SequenceMatcherResult<T>(SequenceMatcherResultType.MATCHED, 0, Optional.of(new MatchResult<T>(range(0), null)));
+    public <T> SequenceMatcherResult empty () {
+        return new SequenceMatcherResult(SequenceMatcherResultType.MATCHED, 0, Optional.of(new MatchResult(range(0), null)));
     }
 
-    public SequenceMatcherResult<String> text (int jump) {
-        return new SequenceMatcherResult<>(SequenceMatcherResultType.MATCHED, jump, Optional.of(textResult(jump)));
+    public SequenceMatcherResult text (int jump) {
+        return new SequenceMatcherResult(SequenceMatcherResultType.MATCHED, jump, Optional.of(textResult(jump)));
     }
 
-    private MatchResult<String> textResult(int jump) {
-        return new MatchResult<>(range(jump), new String(content, offset, Math.min(jump, content.length - offset)));
+    private MatchResult textResult(int jump) {
+        return new MatchResult(range(jump), new String(content, offset, Math.min(jump, content.length - offset)));
     }
 
     public Range range (int jump) {
-        return Range.range(offset, jump);
+        return Range.range(content, offset, jump);
     }
 
-    public <R> SequenceMatcherResult<R> match(int jump, R value) {
-        return SequenceMatcherResult.match(jump, new MatchResult<R>(
+    public SequenceMatcherResult match(int jump, Object value) {
+        return SequenceMatcherResult.match(jump, new MatchResult(
                 range(jump),
                 value
         ));
