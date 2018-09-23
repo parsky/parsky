@@ -7,15 +7,15 @@ import org.parsky.sequence.model.SequenceMatcherResult;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OneOrMoreSequenceMatcher<C> implements SequenceMatcher<C> {
-    private final SequenceMatcher<C> sequenceMatcher;
+public class OneOrMoreSequenceMatcher implements SequenceMatcher {
+    private final SequenceMatcher sequenceMatcher;
 
-    public OneOrMoreSequenceMatcher(SequenceMatcher<C> sequenceMatcher) {
+    public OneOrMoreSequenceMatcher(SequenceMatcher sequenceMatcher) {
         this.sequenceMatcher = sequenceMatcher;
     }
 
     @Override
-    public SequenceMatcherResult matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
+    public SequenceMatcherResult matches(SequenceMatcherRequest sequenceMatcherRequest) {
         SequenceMatcherResult result = sequenceMatcher.matches(sequenceMatcherRequest);
         if (!result.matched()) return result;
 
@@ -28,13 +28,13 @@ public class OneOrMoreSequenceMatcher<C> implements SequenceMatcher<C> {
             if (result.getJump() == 0) return sequenceMatcherRequest.match(jump, nodes);
             jump += result.getJump();
 
-            SequenceMatcherRequest<C> newRequest = sequenceMatcherRequest.incrementOffset(jump);
+            SequenceMatcherRequest newRequest = sequenceMatcherRequest.incrementOffset(jump);
             if (newRequest.isEndOfInput()) return sequenceMatcherRequest.match(jump, nodes);
 
             result = sequenceMatcher.matches(newRequest);
         }
 
-        if (result.isError()) return SequenceMatcherResult.error(sequenceMatcherRequest);
+        if (result.isError()) return result.withJump(jump);
 
         return sequenceMatcherRequest.match(jump, nodes);
     }

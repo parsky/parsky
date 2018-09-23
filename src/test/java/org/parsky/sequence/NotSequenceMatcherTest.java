@@ -32,7 +32,7 @@ public class NotSequenceMatcherTest {
     @Test
     public void error() throws Exception {
         SequenceMatcherRequest request = request("test");
-        SequenceMatcherResult sequenceMatcherResult = SequenceMatcherResult.error(request);
+        SequenceMatcherResult sequenceMatcherResult = request.error("Message");
 
         SequenceMatcher sequenceMatcher = mock(SequenceMatcher.class);
 

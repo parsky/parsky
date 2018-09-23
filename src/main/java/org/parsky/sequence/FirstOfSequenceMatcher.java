@@ -5,16 +5,16 @@ import org.parsky.sequence.model.SequenceMatcherResult;
 
 import java.util.List;
 
-public class FirstOfSequenceMatcher<C> implements SequenceMatcher<C> {
-    private final List<SequenceMatcher<C>> sequenceMatchers;
+public class FirstOfSequenceMatcher implements SequenceMatcher {
+    private final List<SequenceMatcher> sequenceMatchers;
 
-    public FirstOfSequenceMatcher(List<SequenceMatcher<C>> sequenceMatchers) {
+    public FirstOfSequenceMatcher(List<SequenceMatcher> sequenceMatchers) {
         this.sequenceMatchers = sequenceMatchers;
     }
 
     @Override
-    public SequenceMatcherResult matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
-        for (SequenceMatcher<C> sequenceMatcher : sequenceMatchers) {
+    public SequenceMatcherResult matches(SequenceMatcherRequest sequenceMatcherRequest) {
+        for (SequenceMatcher sequenceMatcher : sequenceMatchers) {
             SequenceMatcherResult result = sequenceMatcher.matches(sequenceMatcherRequest);
 
             if (!result.isMismatch()) return result;

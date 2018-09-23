@@ -3,20 +3,20 @@ package org.parsky.sequence;
 import org.parsky.sequence.model.SequenceMatcherRequest;
 import org.parsky.sequence.model.SequenceMatcherResult;
 
-public class NotSequenceMatcher<C> implements SequenceMatcher<C> {
-    private final SequenceMatcher<C> sequenceMatcher;
+public class NotSequenceMatcher implements SequenceMatcher {
+    private final SequenceMatcher sequenceMatcher;
 
-    public NotSequenceMatcher(SequenceMatcher<C> sequenceMatcher) {
+    public NotSequenceMatcher(SequenceMatcher sequenceMatcher) {
         this.sequenceMatcher = sequenceMatcher;
     }
 
     @Override
-    public SequenceMatcherResult matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
+    public SequenceMatcherResult matches(SequenceMatcherRequest sequenceMatcherRequest) {
         SequenceMatcherResult result = sequenceMatcher.matches(sequenceMatcherRequest);
         
         switch (result.getType()) {
             case ERROR:
-                return SequenceMatcherResult.error(sequenceMatcherRequest);
+                return result;
             case MATCHED:
                 return SequenceMatcherResult.mismatch();
             case MISMATCH:

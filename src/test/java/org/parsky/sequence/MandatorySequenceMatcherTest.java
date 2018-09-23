@@ -8,7 +8,7 @@ import static org.junit.Assert.assertThat;
 import static org.parsky.sequence.SequentTestUtils.request;
 
 public class MandatorySequenceMatcherTest {
-    private MandatorySequenceMatcher underTest = new MandatorySequenceMatcher(new StringSequenceMatcher("test"));
+    private MandatorySequenceMatcher underTest = new MandatorySequenceMatcher(new StringSequenceMatcher("test"), "Error message");
 
     @Test
     public void match() throws Exception {

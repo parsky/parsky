@@ -2,47 +2,41 @@ package org.parsky.sequence.transform;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
-import org.parsky.sequence.model.Range;
+import org.parsky.sequence.model.SequenceMatcherRequest;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class ListContentTransformation<C, I, T> implements Transformation<C> {
-    private final Function<Request<C, I>, T> function;
+public class ListContentTransformation implements Transformation {
+    private final Function<Request, Result> function;
 
-    public ListContentTransformation(Function<Request<C, I>, T> function) {
+    public ListContentTransformation(Function<Request, Result> function) {
         this.function = function;
     }
 
     @Override
-    public T transform(C context, Range range, Object input) {
+    public Result transform(SequenceMatcherRequest request, Object input) {
         if (input instanceof Collection) {
-            return function.apply(new Request<C, I>(context, range, new ArrayList<I>((Collection) input)));
+            return function.apply(new Request(request, new ArrayList<>((Collection) input)));
         }
-        return function.apply(new Request<C, I>(context, range, ImmutableList.<I>of((I) input)));
+        return function.apply(new Request(request, ImmutableList.of(input)));
     }
 
-    public static class Request<C, I> {
-        private final C context;
-        private final Range range;
-        private final List<I> values;
+    public static class Request {
+        private final SequenceMatcherRequest request;
+        private final List<Object> values;
 
-        public Request(C context, Range range, List<I> values) {
-            this.context = context;
-            this.range = range;
+        public Request(SequenceMatcherRequest request, List<Object> values) {
+            this.request = request;
             this.values = values;
         }
 
-        public C getContext() {
-            return context;
-        }
-
-        public <T extends I> T get (int index, Class<T> type) {
+        public <T> T get (int index, Class<T> type) {
             return type.cast(values.get(index));
         }
 
-        public <T extends I> T get (int index) {
+        public <T> T get (int index) {
             return (T) values.get(index);
         }
 
@@ -50,12 +44,12 @@ public class ListContentTransformation<C, I, T> implements Transformation<C> {
             return values.size();
         }
 
-        public List<I> getValues() {
+        public List<Object> getValues() {
             return values;
         }
 
-        public Range getRange() {
-            return range;
+        public SequenceMatcherRequest getSequenceMatcherRequest() {
+            return request;
         }
     }
 

@@ -4,25 +4,23 @@ import com.google.common.base.Optional;
 
 public class SequenceMatcherResult {
     public static SequenceMatcherResult mismatch () {
-        return new SequenceMatcherResult(SequenceMatcherResultType.MISMATCH, 0, Optional.<MatchResult>absent());
+        return new SequenceMatcherResult(SequenceMatcherResultType.MISMATCH, 0, Optional.<MatchResult>absent(), Optional.<ErrorResult>absent());
     }
 
     public static SequenceMatcherResult match (int jump, MatchResult result) {
-        return new SequenceMatcherResult(SequenceMatcherResultType.MATCHED, jump, Optional.of(result));
-    }
-
-    public static SequenceMatcherResult error(SequenceMatcherRequest sequenceMatcherRequest) {
-        return new SequenceMatcherResult(SequenceMatcherResultType.ERROR, sequenceMatcherRequest.getOffset(), Optional.<MatchResult>absent());
+        return new SequenceMatcherResult(SequenceMatcherResultType.MATCHED, jump, Optional.of(result), Optional.<ErrorResult>absent());
     }
 
     private final SequenceMatcherResultType type;
     private final int jump;
     private final Optional<MatchResult> match;
+    private final Optional<ErrorResult> error;
 
-    public SequenceMatcherResult(SequenceMatcherResultType type, int jump, Optional<MatchResult> match) {
+    public SequenceMatcherResult(SequenceMatcherResultType type, int jump, Optional<MatchResult> match, Optional<ErrorResult> error) {
         this.type = type;
         this.jump = jump;
         this.match = match;
+        this.error = error;
     }
 
     public boolean matched() {
@@ -49,10 +47,14 @@ public class SequenceMatcherResult {
     }
 
     public SequenceMatcherResult withJump(int jump) {
-        return new SequenceMatcherResult(type, jump, match);
+        return new SequenceMatcherResult(type, jump, match, error);
     }
 
     public <R> SequenceMatcherResult withValue(R value) {
-        return new SequenceMatcherResult(type, jump, Optional.of(match.get().with(value)));
+        return new SequenceMatcherResult(type, jump, Optional.of(match.get().with(value)), error);
+    }
+
+    public ErrorResult getError() {
+        return error.get();
     }
 }

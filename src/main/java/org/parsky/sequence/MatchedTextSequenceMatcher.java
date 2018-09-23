@@ -3,15 +3,15 @@ package org.parsky.sequence;
 import org.parsky.sequence.model.SequenceMatcherRequest;
 import org.parsky.sequence.model.SequenceMatcherResult;
 
-public class MatchedTextSequenceMatcher<C> implements SequenceMatcher<C> {
-    private final SequenceMatcher<C> sequenceMatcher;
+public class MatchedTextSequenceMatcher implements SequenceMatcher {
+    private final SequenceMatcher sequenceMatcher;
 
-    public MatchedTextSequenceMatcher(SequenceMatcher<C> sequenceMatcher) {
+    public MatchedTextSequenceMatcher(SequenceMatcher sequenceMatcher) {
         this.sequenceMatcher = sequenceMatcher;
     }
 
     @Override
-    public SequenceMatcherResult matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
+    public SequenceMatcherResult matches(SequenceMatcherRequest sequenceMatcherRequest) {
         SequenceMatcherResult result = sequenceMatcher.matches(sequenceMatcherRequest);
 
         if (result.matched()) {

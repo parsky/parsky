@@ -18,9 +18,6 @@ public class CharacterMatchers {
     public static CharacterMatcher noneOf(String listOfChars) {
         return new NoneOfCharacterMatcher(listOfChars.toCharArray());
     }
-    public static CharacterMatcher endOfInput() {
-        return EndOfInputCharacterMatcher.endOfInput();
-    }
     public static CharacterMatcher and(CharacterMatcher matcher, CharacterMatcher... list) {
         return new AndCharacterMatcher(ImmutableList.<CharacterMatcher>builder().add(matcher).add(list).build());
     }

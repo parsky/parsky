@@ -3,7 +3,7 @@ package org.parsky.sequence;
 import org.parsky.sequence.model.SequenceMatcherRequest;
 import org.parsky.sequence.model.SequenceMatcherResult;
 
-public class StringSequenceMatcher<C> implements SequenceMatcher<C> {
+public class StringSequenceMatcher implements SequenceMatcher {
     private final String string;
 
     public StringSequenceMatcher(String string) {
@@ -11,7 +11,7 @@ public class StringSequenceMatcher<C> implements SequenceMatcher<C> {
     }
 
     @Override
-    public SequenceMatcherResult matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
+    public SequenceMatcherResult matches(SequenceMatcherRequest sequenceMatcherRequest) {
         if (matchesString(sequenceMatcherRequest)) {
             return sequenceMatcherRequest.text(string.length());
         }

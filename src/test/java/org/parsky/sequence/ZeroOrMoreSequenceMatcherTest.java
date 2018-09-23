@@ -25,7 +25,7 @@ public class ZeroOrMoreSequenceMatcherTest {
         SequenceMatcherRequest request = request("te");
         SequenceMatcher sequenceMatcher = mock(SequenceMatcher.class);
 
-        given(sequenceMatcher.matches(request)).willReturn(SequenceMatcherResult.error(request));
+        given(sequenceMatcher.matches(request)).willReturn(request.error("error"));
 
         SequenceMatcherResult result = new ZeroOrMoreSequenceMatcher(sequenceMatcher)
                 .matches(request);

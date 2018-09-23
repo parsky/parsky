@@ -2,16 +2,18 @@ package org.parsky.sequence.model;
 
 
 import com.google.common.base.Optional;
-import org.parsky.character.EndOfInputCharacterMatcher;
+import org.parsky.context.Context;
 
-public class SequenceMatcherRequest<C> {
+public class SequenceMatcherRequest {
     private final char[] content;
     private final int offset;
-    private final C context;
+    private final boolean testMode;
+    private final Context context;
 
-    public SequenceMatcherRequest(char[] content, int offset, C context) {
+    public SequenceMatcherRequest(char[] content, int offset, Context context, boolean testMode) {
         this.content = content;
         this.offset = offset;
+        this.testMode = testMode;
         this.context = context;
     }
 
@@ -19,7 +21,7 @@ public class SequenceMatcherRequest<C> {
         return offset;
     }
 
-    public C getContext() {
+    public Context getContext() {
         return context;
     }
 
@@ -28,25 +30,34 @@ public class SequenceMatcherRequest<C> {
         return content[index + offset];
     }
 
+    public boolean isTestMode() {
+        return testMode;
+    }
+
     public char getCurrentCharacter() {
         return getCharacter(0);
     }
 
-    public SequenceMatcherRequest<C> incrementOffset (int offset) {
-        return new SequenceMatcherRequest<C>(content, this.offset + offset, context);
+    public SequenceMatcherRequest incrementOffset (int offset) {
+        return new SequenceMatcherRequest(content, this.offset + offset, context, testMode);
     }
 
     public boolean isEndOfInput() {
-        return getCurrentCharacter() == EndOfInputCharacterMatcher.EOI;
+        return getCurrentCharacter() == (char) -1;
     }
 
-    public <T> SequenceMatcherResult empty () {
-        return new SequenceMatcherResult(SequenceMatcherResultType.MATCHED, 0, Optional.of(new MatchResult(range(0), null)));
+    public SequenceMatcherResult empty () {
+        return new SequenceMatcherResult(SequenceMatcherResultType.MATCHED, 0, Optional.of(new MatchResult(range(0), null)), Optional.<ErrorResult>absent());
     }
 
     public SequenceMatcherResult text (int jump) {
-        return new SequenceMatcherResult(SequenceMatcherResultType.MATCHED, jump, Optional.of(textResult(jump)));
+        return new SequenceMatcherResult(SequenceMatcherResultType.MATCHED, jump, Optional.of(textResult(jump)), Optional.<ErrorResult>absent());
     }
+
+    public SequenceMatcherResult error (String errorMessage) {
+        return new SequenceMatcherResult(SequenceMatcherResultType.ERROR, 0, Optional.<MatchResult>absent(), Optional.of(new ErrorResult(errorMessage)));
+    }
+
 
     private MatchResult textResult(int jump) {
         return new MatchResult(range(jump), new String(content, offset, Math.min(jump, content.length - offset)));
@@ -61,5 +72,18 @@ public class SequenceMatcherRequest<C> {
                 range(jump),
                 value
         ));
+    }
+
+    public SequenceMatcherRequest testMode() {
+        return new SequenceMatcherRequest(
+                content,
+                offset,
+                context,
+                true
+        );
+    }
+
+    public char[] getContent() {
+        return content;
     }
 }

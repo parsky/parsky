@@ -18,7 +18,7 @@ public class OneOrMoreSequenceMatcherTest {
         SequenceMatcherRequest request = request("tes");
         SequenceMatcher sequenceMatcher = mock(SequenceMatcher.class);
 
-        given(sequenceMatcher.matches(request)).willReturn(SequenceMatcherResult.error(request));
+        given(sequenceMatcher.matches(request)).willReturn(request.error("error"));
 
         SequenceMatcherResult result = new OneOrMoreSequenceMatcher(sequenceMatcher).matches(request);
 

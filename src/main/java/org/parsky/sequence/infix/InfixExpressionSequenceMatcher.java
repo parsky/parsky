@@ -7,8 +7,8 @@ import org.parsky.sequence.infix.configuration.CombinedExpressionFactory;
 import org.parsky.sequence.infix.transform.CombinedExpressionTransformation;
 import org.parsky.sequence.transform.Transformations;
 
-public class InfixExpressionSequenceMatcher<Context, Expression, InfixExpression> extends TransformSequenceMatcher<Context> {
-    public InfixExpressionSequenceMatcher(CombinedExpressionFactory<Expression, InfixExpression> combinedExpressionFactory, SequenceMatcher<Context> expressionSequenceMatcher, SequenceMatcher<Context> infixExpressionSequenceMatcher) {
+public class InfixExpressionSequenceMatcher<Expression, InfixExpression> extends TransformSequenceMatcher {
+    public InfixExpressionSequenceMatcher(CombinedExpressionFactory<Expression, InfixExpression> combinedExpressionFactory, SequenceMatcher expressionSequenceMatcher, SequenceMatcher infixExpressionSequenceMatcher) {
         super(SequenceMatchers.flatten(
                 SequenceMatchers.sequence(
                         expressionSequenceMatcher,
@@ -16,11 +16,11 @@ public class InfixExpressionSequenceMatcher<Context, Expression, InfixExpression
                                 SequenceMatchers.zeroOrMore(
                                         SequenceMatchers.sequence(
                                                 infixExpressionSequenceMatcher,
-                                                (SequenceMatcher<Context>) expressionSequenceMatcher
+                                                (SequenceMatcher) expressionSequenceMatcher
                                         )
                                 )
                         )
                 )
-        ), Transformations.fromContentList(new CombinedExpressionTransformation<Context, Expression, InfixExpression>(combinedExpressionFactory)));
+        ), Transformations.fromContentList(new CombinedExpressionTransformation<>(combinedExpressionFactory)));
     }
 }

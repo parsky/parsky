@@ -7,15 +7,15 @@ import org.parsky.sequence.model.SequenceMatcherResult;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ZeroOrMoreSequenceMatcher<C> implements SequenceMatcher<C> {
-    private final SequenceMatcher<C> sequenceMatcher;
+public class ZeroOrMoreSequenceMatcher implements SequenceMatcher {
+    private final SequenceMatcher sequenceMatcher;
 
-    public ZeroOrMoreSequenceMatcher(SequenceMatcher<C> sequenceMatcher) {
+    public ZeroOrMoreSequenceMatcher(SequenceMatcher sequenceMatcher) {
         this.sequenceMatcher = sequenceMatcher;
     }
 
     @Override
-    public SequenceMatcherResult matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
+    public SequenceMatcherResult matches(SequenceMatcherRequest sequenceMatcherRequest) {
         int jump = 0;
         SequenceMatcherResult result = sequenceMatcher.matches(sequenceMatcherRequest);
         List<Object> nodes = new ArrayList<>();
@@ -26,7 +26,7 @@ public class ZeroOrMoreSequenceMatcher<C> implements SequenceMatcher<C> {
                 return sequenceMatcherRequest.match(jump, nodes);
 
             jump += result.getJump();
-            SequenceMatcherRequest<C> newRequest = sequenceMatcherRequest.incrementOffset(jump);
+            SequenceMatcherRequest newRequest = sequenceMatcherRequest.incrementOffset(jump);
 
             if (newRequest.isEndOfInput())
                 return sequenceMatcherRequest.match(jump, nodes);

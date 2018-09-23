@@ -7,15 +7,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class FlattenSequenceMatcher<C> implements SequenceMatcher<C> {
-    private final SequenceMatcher<C> sequenceMatcher;
+public class FlattenSequenceMatcher implements SequenceMatcher {
+    private final SequenceMatcher sequenceMatcher;
 
-    public FlattenSequenceMatcher(SequenceMatcher<C> sequenceMatcher) {
+    public FlattenSequenceMatcher(SequenceMatcher sequenceMatcher) {
         this.sequenceMatcher = sequenceMatcher;
     }
 
     @Override
-    public SequenceMatcherResult matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
+    public SequenceMatcherResult matches(SequenceMatcherRequest sequenceMatcherRequest) {
         SequenceMatcherResult result = sequenceMatcher.matches(sequenceMatcherRequest);
 
         if (result.matched()) {

@@ -1,37 +1,33 @@
 package org.parsky.sequence.transform;
 
 import com.google.common.base.Function;
-import org.parsky.sequence.model.Range;
+import org.parsky.sequence.model.SequenceMatcherRequest;
+import org.parsky.sequence.transform.context.TransformContext;
 
-public class ContentTransformation<C, I, T> implements Transformation<C> {
-    private final Function<Request<C, I>, T> function;
+public class ContentTransformation<I> implements Transformation {
+    private final Function<Request<I>, Result> function;
 
-    public ContentTransformation(Function<Request<C, I>, T> function) {
+    public ContentTransformation(Function<Request<I>, Result> function) {
         this.function = function;
     }
 
     @Override
-    public T transform(C context, Range range, Object input) {
-        return function.apply(new Request<>(context, range, (I) input));
+    public Result transform(SequenceMatcherRequest request, Object input) {
+        return function.apply(new Request<>(request, (I) input));
     }
 
-    public static class Request<C, V> {
-        private final C context;
-        private final Range range;
+    public static class Request<V> {
+        private final SequenceMatcherRequest request;
         private final V value;
 
-        public Request(C context, Range range, V value) {
-            this.context = context;
-            this.range = range;
+
+        public Request(SequenceMatcherRequest request, V value) {
+            this.request = request;
             this.value = value;
         }
 
-        public C getContext() {
-            return context;
-        }
-
-        public Range getRange() {
-            return range;
+        public SequenceMatcherRequest getSequenceMatcherRequest() {
+            return request;
         }
 
         public V getValue() {

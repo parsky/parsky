@@ -5,7 +5,7 @@ import org.parsky.character.CharacterMatcher;
 import org.parsky.sequence.model.SequenceMatcherRequest;
 import org.parsky.sequence.model.SequenceMatcherResult;
 
-public class CharacterSequenceMatcher<C> implements SequenceMatcher<C> {
+public class CharacterSequenceMatcher implements SequenceMatcher {
     private final CharacterMatcher matcher;
 
     public CharacterSequenceMatcher(CharacterMatcher matcher) {
@@ -13,7 +13,7 @@ public class CharacterSequenceMatcher<C> implements SequenceMatcher<C> {
     }
 
     @Override
-    public SequenceMatcherResult matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
+    public SequenceMatcherResult matches(SequenceMatcherRequest sequenceMatcherRequest) {
         if (matcher.matches(sequenceMatcherRequest.getCurrentCharacter())) {
             return sequenceMatcherRequest.text(1);
         }

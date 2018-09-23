@@ -17,7 +17,7 @@ public class SequenceMatcherResultTest {
         SequenceMatcherResultType type = SequenceMatcherResultType.ERROR;
         Optional<MatchResult> matchResultOptional = Optional.of(matchResult);
 
-        SequenceMatcherResult underTest = new SequenceMatcherResult(type, 0, matchResultOptional);
+        SequenceMatcherResult underTest = new SequenceMatcherResult(type, 0, matchResultOptional, Optional.<ErrorResult>absent());
 
         SequenceMatcherResult result = underTest.withJump(1);
 
@@ -36,7 +36,7 @@ public class SequenceMatcherResultTest {
 
         given(matchResult.with(ArgumentMatchers.any())).willReturn(anotherMatchResult);
 
-        SequenceMatcherResult underTest = new SequenceMatcherResult(type, 0, matchResultOptional);
+        SequenceMatcherResult underTest = new SequenceMatcherResult(type, 0, matchResultOptional, Optional.<ErrorResult>absent());
 
         SequenceMatcherResult result = underTest.withValue(new Object());
 
@@ -46,23 +46,16 @@ public class SequenceMatcherResultTest {
     }
 
     @Test
-    public void isError() throws Exception {
-        assertTrue(SequenceMatcherResult.error(mock(SequenceMatcherRequest.class)).isError());
-        assertFalse(new SequenceMatcherResult(SequenceMatcherResultType.MATCHED, 0, Optional.<MatchResult>absent()).isError());
-        assertFalse(new SequenceMatcherResult(SequenceMatcherResultType.MISMATCH, 0, Optional.<MatchResult>absent()).isError());
-    }
-
-    @Test
     public void isMatch() throws Exception {
         assertTrue(SequenceMatcherResult.match(0, mock(MatchResult.class)).matched());
-        assertFalse(new SequenceMatcherResult(SequenceMatcherResultType.ERROR, 0, Optional.<MatchResult>absent()).matched());
-        assertFalse(new SequenceMatcherResult(SequenceMatcherResultType.MISMATCH, 0, Optional.<MatchResult>absent()).matched());
+        assertFalse(new SequenceMatcherResult(SequenceMatcherResultType.ERROR, 0, Optional.<MatchResult>absent(), Optional.<ErrorResult>absent()).matched());
+        assertFalse(new SequenceMatcherResult(SequenceMatcherResultType.MISMATCH, 0, Optional.<MatchResult>absent(), Optional.<ErrorResult>absent()).matched());
     }
 
     @Test
     public void isMismatch() throws Exception {
         assertTrue(SequenceMatcherResult.mismatch().isMismatch());
-        assertFalse(new SequenceMatcherResult(SequenceMatcherResultType.ERROR, 0, Optional.<MatchResult>absent()).isMismatch());
-        assertFalse(new SequenceMatcherResult(SequenceMatcherResultType.MATCHED, 0, Optional.<MatchResult>absent()).isMismatch());
+        assertFalse(new SequenceMatcherResult(SequenceMatcherResultType.ERROR, 0, Optional.<MatchResult>absent(), Optional.<ErrorResult>absent()).isMismatch());
+        assertFalse(new SequenceMatcherResult(SequenceMatcherResultType.MATCHED, 0, Optional.<MatchResult>absent(), Optional.<ErrorResult>absent()).isMismatch());
     }
 }

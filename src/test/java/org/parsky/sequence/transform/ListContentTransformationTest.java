@@ -4,7 +4,7 @@ import com.google.common.base.Function;
 import org.hamcrest.FeatureMatcher;
 import org.junit.Test;
 import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
-import org.parsky.sequence.model.Range;
+import org.parsky.sequence.model.SequenceMatcherRequest;
 
 import java.util.ArrayList;
 
@@ -18,21 +18,21 @@ public class ListContentTransformationTest {
     @Test
     public void transform() throws Exception {
         String content = "test";
-        Function<ListContentTransformation.Request<Object, Object>, String> function = mock(Function.class);
-        ListContentTransformation<Object, Object, String> underTest = new ListContentTransformation<>(function);
+        Function<ListContentTransformation.Request, Transformation.Result> function = mock(Function.class);
+        ListContentTransformation underTest = new ListContentTransformation(function);
         ArrayList<Object> input = new ArrayList<>();
 
-        given(function.apply(argThat(requestWithValues(input)))).willReturn(content);
+        given(function.apply(argThat(requestWithValues(input)))).willReturn(Transformation.Result.success(content));
 
-        Object result = underTest.transform(new Object(), mock(Range.class), input);
+        Object result = underTest.transform(mock(SequenceMatcherRequest.class), input);
 
         assertEquals(result, content);
     }
 
-    private HamcrestArgumentMatcher<ListContentTransformation.Request<Object, Object>> requestWithValues(final Object input) {
-        return new HamcrestArgumentMatcher<>(new FeatureMatcher<ListContentTransformation.Request<Object, Object>, Object>(is(input), "list", "list") {
+    private HamcrestArgumentMatcher<ListContentTransformation.Request> requestWithValues(final Object input) {
+        return new HamcrestArgumentMatcher<>(new FeatureMatcher<ListContentTransformation.Request, Object>(is(input), "list", "list") {
             @Override
-            protected Object featureValueOf(ListContentTransformation.Request<Object, Object> request) {
+            protected Object featureValueOf(ListContentTransformation.Request request) {
                 return request.getValues();
             }
         });

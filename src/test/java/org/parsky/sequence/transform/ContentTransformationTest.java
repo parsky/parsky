@@ -6,7 +6,8 @@ import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
-import org.parsky.sequence.model.Range;
+import org.parsky.sequence.model.SequenceMatcherRequest;
+import org.parsky.sequence.transform.context.TransformContext;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.core.Is.is;
@@ -16,14 +17,15 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 public class ContentTransformationTest {
-    private final Function<ContentTransformation.Request<Object, String>, String> function = mock(Function.class);
-    private ContentTransformation<Object, String, String> underTest = new ContentTransformation<>(function);
+    private final Function<ContentTransformation.Request<String>, Transformation.Result> function = mock(Function.class);
+    private ContentTransformation<String> underTest = new ContentTransformation<>(function);
 
     @Test
     public void transform() throws Exception {
-        given(function.apply(argThat(requestWithContent(equalTo("test"))))).willReturn("result");
+        SequenceMatcherRequest transformContext = mock(SequenceMatcherRequest.class);
+        given(function.apply(argThat(requestWithContent(equalTo("test"))))).willReturn(Transformation.Result.success("result"));
 
-        String result = underTest.transform(new Object(), mock(Range.class), "test");
+        String result = (String) underTest.transform(transformContext, "test").getResult();
 
         assertThat(result, is("result"));
     }

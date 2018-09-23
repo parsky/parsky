@@ -7,25 +7,25 @@ import org.parsky.sequence.model.SequenceMatcherResult;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConsecutiveSequenceMatcher<C> implements SequenceMatcher<C> {
-    private final List<SequenceMatcher<C>> sequenceMatchers;
+public class ConsecutiveSequenceMatcher implements SequenceMatcher {
+    private final List<SequenceMatcher> sequenceMatchers;
 
-    public ConsecutiveSequenceMatcher(List<SequenceMatcher<C>> sequenceMatchers) {
+    public ConsecutiveSequenceMatcher(List<SequenceMatcher> sequenceMatchers) {
         this.sequenceMatchers = sequenceMatchers;
     }
 
     @Override
-    public SequenceMatcherResult matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
+    public SequenceMatcherResult matches(SequenceMatcherRequest sequenceMatcherRequest) {
         int jump = 0;
         List<Object> nodes = new ArrayList<>();
 
-        for (SequenceMatcher<C> sequenceMatcher : sequenceMatchers) {
+        for (SequenceMatcher sequenceMatcher : sequenceMatchers) {
             SequenceMatcherResult result = sequenceMatcher.matches(sequenceMatcherRequest.incrementOffset(jump));
+            jump += result.getJump();
 
-            if (result.isError()) return SequenceMatcherResult.error(sequenceMatcherRequest);
+            if (result.isError()) return result.withJump(jump);
             if (!result.matched()) return SequenceMatcherResult.mismatch();
 
-            jump += result.getJump();
             nodes.add(result.getMatchResult().getValue());
         }
 

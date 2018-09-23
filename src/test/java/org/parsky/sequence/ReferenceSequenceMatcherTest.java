@@ -8,7 +8,7 @@ import static org.junit.Assert.assertThat;
 import static org.parsky.sequence.SequentTestUtils.request;
 
 public class ReferenceSequenceMatcherTest {
-    private ReferenceSequenceMatcher<Object> referenceSequenceMatcher = new ReferenceSequenceMatcher<>();
+    private ReferenceSequenceMatcher referenceSequenceMatcher = new ReferenceSequenceMatcher();
 
     @Test
     public void match() throws Exception {

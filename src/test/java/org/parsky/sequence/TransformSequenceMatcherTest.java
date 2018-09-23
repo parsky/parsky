@@ -14,7 +14,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 public class TransformSequenceMatcherTest {
     private final SequenceMatcher sequenceMatcher = mock(SequenceMatcher.class);
     private final Transformation transformation = mock(Transformation.class);
-    private TransformSequenceMatcher<Object> underTest = new TransformSequenceMatcher<>(sequenceMatcher, transformation);
+    private TransformSequenceMatcher underTest = new TransformSequenceMatcher(sequenceMatcher, transformation);
 
     @Test
     public void matches() throws Exception {

@@ -11,8 +11,8 @@ import static org.parsky.sequence.SequentTestUtils.request;
 public class SkipWhiteSpacesSequenceMatcherTest {
     private SkipWhiteSpacesSequenceMatcher underTest = new SkipWhiteSpacesSequenceMatcher(
             WhiteSpaceCharacterMatcher.whitespace(),
-            new StringSequenceMatcher("test")
-    );
+            new StringSequenceMatcher("test"),
+            true, true);
 
     @Test
     public void match() throws Exception {

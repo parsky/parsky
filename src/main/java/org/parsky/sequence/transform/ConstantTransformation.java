@@ -1,8 +1,8 @@
 package org.parsky.sequence.transform;
 
-import org.parsky.sequence.model.Range;
+import org.parsky.sequence.model.SequenceMatcherRequest;
 
-public class ConstantTransformation<C> implements Transformation<C> {
+public class ConstantTransformation implements Transformation {
     private final Object value;
 
     public ConstantTransformation(Object value) {
@@ -10,7 +10,7 @@ public class ConstantTransformation<C> implements Transformation<C> {
     }
 
     @Override
-    public Object transform(C context, Range range, Object input) {
-        return value;
+    public Result transform(SequenceMatcherRequest request, Object input) {
+        return Result.success(value);
     }
 }

@@ -1,29 +1,26 @@
 package org.parsky.sequence.transform;
 
-import org.parsky.sequence.model.Range;
+import org.parsky.context.Label;
+import org.parsky.sequence.model.SequenceMatcherRequest;
 
-public class LabelledTransformation<C> implements Transformation<C> {
+public class LabelledTransformation implements Transformation {
     private final String label;
-    private final Transformation<C> transformation;
+    private final Transformation transformation;
 
-    public LabelledTransformation(String label, Transformation<C> transformation) {
+    public LabelledTransformation(String label, Transformation transformation) {
         this.label = label;
         this.transformation = transformation;
     }
 
     @Override
-    public Object transform(C context, Range range, Object input) {
-        try {
-            return transformation.transform(context, range, input);
-        } catch (RuntimeException e) {
-            throw new LabelRuntimeException(String.format("Exception captured on sequence matcher labelled '%s'", label), e);
-        }
-    }
+    public Result transform(SequenceMatcherRequest request, Object input) {
+        request.getContext().push(new Label(label));
+        Result result = transformation.transform(request, input);
 
-
-    public static class LabelRuntimeException extends RuntimeException {
-        public LabelRuntimeException(String message, Throwable cause) {
-            super(message, cause);
+        if (result.isSuccess()) {
+            request.getContext().pop(Label.class);
         }
+
+        return result;
     }
 }

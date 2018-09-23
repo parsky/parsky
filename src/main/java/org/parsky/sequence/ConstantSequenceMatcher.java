@@ -4,7 +4,7 @@ import org.parsky.sequence.model.MatchResult;
 import org.parsky.sequence.model.SequenceMatcherRequest;
 import org.parsky.sequence.model.SequenceMatcherResult;
 
-public class ConstantSequenceMatcher<C> implements SequenceMatcher<C> {
+public class ConstantSequenceMatcher implements SequenceMatcher {
     private final Object value;
 
     public ConstantSequenceMatcher(Object value) {
@@ -12,7 +12,7 @@ public class ConstantSequenceMatcher<C> implements SequenceMatcher<C> {
     }
 
     @Override
-    public SequenceMatcherResult matches(SequenceMatcherRequest<C> sequenceMatcherRequest) {
+    public SequenceMatcherResult matches(SequenceMatcherRequest sequenceMatcherRequest) {
         return SequenceMatcherResult.match(0, new MatchResult(sequenceMatcherRequest.range(0), value));
     }
 }

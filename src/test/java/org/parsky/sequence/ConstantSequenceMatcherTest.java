@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 public class ConstantSequenceMatcherTest {
     @Test
     public void constant() throws Exception {
-        SequenceMatcherResult result = new ConstantSequenceMatcher<>(3)
+        SequenceMatcherResult result = new ConstantSequenceMatcher(3)
                 .matches(SequentTestUtils.request("asd"));
 
 
