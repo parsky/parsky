@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="parsky-api_main" target="1.5" />
+      <module name="parsky-api_test" target="1.5" />
+      <module name="parsky-simple_main" target="1.5" />
+      <module name="parsky-simple_test" target="1.5" />
+      <module name="parsky_main" target="1.7" />
+      <module name="parsky_test" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
